@@ -1,0 +1,10 @@
+# Package manager directory
+node_modules
+
+# Build output
+dist
+build
+coverage
+
+# Static asset directory
+public
