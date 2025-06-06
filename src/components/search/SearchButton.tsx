@@ -1,6 +1,6 @@
 export default function SearchButton() {
   return (
-    <button className="flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded-md text-sm">
+    <button className="flex items-center gap-2 bg-navy-700 hover:bg-blue-800 text-white px-5 py-2 rounded-md text-sm">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-4 w-4"
