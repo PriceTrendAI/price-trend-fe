@@ -7,8 +7,8 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-gray-200 bg-white">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <header className="border-b border-gray-200 bg-white mb-8">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between mb">
           <a href="/" className="text-xl font-bold text-navy-900">
             Price Trend AI
           </a>

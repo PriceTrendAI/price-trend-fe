@@ -6,6 +6,11 @@ export default {
       fontFamily: {
         pretendard: ['Pretendard', 'sans-serif'],
       },
+      colors: {
+        navy: {
+          700: '#1e3a8a',
+        },
+      },
     },
   },
   plugins: [],
