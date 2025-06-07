@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import PropertyModal from '../modal/PropertyModal';
 import PropertyCard from './PropertyCard';
 
 const dummyProperties = [
@@ -21,6 +23,10 @@ const dummyProperties = [
     price: 120000000,
     size: 25,
     type: '오피스텔',
+    rooms: 1,
+    bathrooms: 1,
+    builtYear: 2015,
+    description: '한강뷰가 매력적인 오피스텔입니다.',
   },
   {
     id: 3,
@@ -29,6 +35,10 @@ const dummyProperties = [
     price: 98000000,
     size: 20,
     type: '투룸',
+    rooms: 1,
+    bathrooms: 1,
+    builtYear: 2015,
+    description: '한강뷰가 매력적인 오피스텔입니다.',
   },
   {
     id: 4,
@@ -37,6 +47,10 @@ const dummyProperties = [
     price: 98000000,
     size: 20,
     type: '투룸',
+    rooms: 1,
+    bathrooms: 1,
+    builtYear: 2015,
+    description: '한강뷰가 매력적인 오피스텔입니다.',
   },
   {
     id: 5,
@@ -45,12 +59,33 @@ const dummyProperties = [
     price: 98000000,
     size: 20,
     type: '투룸',
+    rooms: 1,
+    bathrooms: 1,
+    builtYear: 2015,
+    description: '한강뷰가 매력적인 오피스텔입니다.',
   },
 ];
 
+type PropertyData = {
+  id: number;
+  title: string;
+  address: string;
+  price: number;
+  size: number;
+  type: string;
+  imageUrl?: string;
+  rooms: number;
+  bathrooms: number;
+  builtYear: number;
+  description: string;
+};
+
 export default function PropertyGrid() {
+  const [selectedProperty, setSelectedProperty] = useState<PropertyData | null>(null);
+
   const handleClick = (id: number) => {
-    console.log(`Card clicked: ${id}`);
+    const property = dummyProperties.find((p) => p.id === id);
+    if (property) setSelectedProperty(property);
   };
 
   return (
@@ -67,6 +102,11 @@ export default function PropertyGrid() {
           />
         ))}
       </div>
+      <PropertyModal
+        isOpen={!!selectedProperty}
+        onClose={() => setSelectedProperty(null)}
+        property={selectedProperty}
+      />
     </div>
   );
 }
