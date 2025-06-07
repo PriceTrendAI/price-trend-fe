@@ -1,3 +1,4 @@
+import PropertyGrid from './components/card/PropertyGrid';
 import Layout from './components/layout/Layout';
 import SearchForm from './components/search/SearchForm';
 
@@ -9,6 +10,7 @@ function App() {
           부동산 서비스
         </h1>
         <SearchForm />
+        <PropertyGrid />
       </Layout>
     </>
   );
