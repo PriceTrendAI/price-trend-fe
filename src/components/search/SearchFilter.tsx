@@ -1,29 +1,48 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { MapPin } from 'lucide-react';
 
-export default function SearchFilter() {
-  const [searchParams, setSearchParams] = useState({
-    location: '',
-    propertyType: '',
-    dealType: '',
-  });
+export interface SearchParams {
+  location: string;
+  propertyType: string;
+  dealType: string;
+  size?: string;
+}
 
-  const [availableSizes, setAvailableSizes] = useState<string[]>([]);
-  const [selectedSize, setSelectedSize] = useState('');
+interface SearchFilterProps {
+  initialSearchParams: SearchParams;
+  availableSizes: string[];
+  onParamsChange: (params: SearchParams) => void;
+}
+
+export default function SearchFilter({
+  initialSearchParams,
+  availableSizes,
+  onParamsChange,
+}: SearchFilterProps) {
+  const [currentFilterState, setCurrentFilterState] = useState<SearchParams>(initialSearchParams);
+
+  const handleChange =
+    (field: keyof SearchParams) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const updated = { ...currentFilterState, [field]: e.target.value };
+      setCurrentFilterState(updated);
+      onParamsChange(updated);
+    };
 
   const canShowSizeOptions =
-    searchParams.location && searchParams.propertyType && searchParams.dealType;
+    currentFilterState.location &&
+    currentFilterState.propertyType &&
+    currentFilterState.dealType &&
+    availableSizes.length > 0;
 
   useEffect(() => {
-    if (canShowSizeOptions) {
-      setAvailableSizes(['59', '74', '84', '101']);
-    } else {
-      setAvailableSizes([]);
-      setSelectedSize('');
+    if (!canShowSizeOptions) {
+      const updated = { ...currentFilterState, size: '' };
+      setCurrentFilterState(updated);
+      onParamsChange(updated);
     }
-  }, [searchParams]);
+  }, [canShowSizeOptions]);
 
   return (
     <>
@@ -36,9 +55,9 @@ export default function SearchFilter() {
             <input
               type="text"
               placeholder="예: 서울시 강남구 개포동"
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-9"
-              value={searchParams.location}
-              onChange={(e) => setSearchParams((prev) => ({ ...prev, location: e.target.value }))}
+              className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-9"
+              value={currentFilterState.location}
+              onChange={handleChange('location')}
             />
           </div>
         </div>
@@ -47,9 +66,9 @@ export default function SearchFilter() {
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700">매물 유형</label>
           <select
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            value={searchParams.propertyType}
-            onChange={(e) => setSearchParams((prev) => ({ ...prev, propertyType: e.target.value }))}
+            className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            value={currentFilterState.propertyType}
+            onChange={handleChange('propertyType')}
           >
             <option value="">매물 유형 선택</option>
             <option value="apartment">아파트</option>
@@ -63,9 +82,9 @@ export default function SearchFilter() {
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700">거래 유형</label>
           <select
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            value={searchParams.dealType}
-            onChange={(e) => setSearchParams((prev) => ({ ...prev, dealType: e.target.value }))}
+            className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            value={currentFilterState.dealType}
+            onChange={handleChange('dealType')}
           >
             <option value="">거래 유형 선택</option>
             <option value="sale">매매</option>
@@ -74,14 +93,15 @@ export default function SearchFilter() {
           </select>
         </div>
       </div>
+
       {/* 면적 선택 */}
-      {canShowSizeOptions && availableSizes.length > 0 && (
+      {canShowSizeOptions && (
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700">면적 선택</label>
           <select
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            value={selectedSize}
-            onChange={(e) => setSelectedSize(e.target.value)}
+            className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            value={currentFilterState.size}
+            onChange={handleChange('size')}
           >
             <option value="">평수를 선택하세요</option>
             {availableSizes.map((size) => (
