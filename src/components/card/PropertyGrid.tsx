@@ -90,9 +90,6 @@ export default function PropertyGrid() {
 
   return (
     <div>
-      <h2 className="max-w-[1280px] mx-auto px-4 text-2xl font-semibold text-navy-800">
-        검색 결과
-      </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-[1280px] mx-auto px-4 py-4">
         {dummyProperties.map((property) => (
           <PropertyCard
