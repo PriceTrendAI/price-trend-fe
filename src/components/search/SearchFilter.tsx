@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Home, MapPin, Search } from 'lucide-react';
+import { Home, LoaderCircle, MapPin, Search } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { fetchSearchResults } from '../../api/search';
 import PropertyGrid from '../card/PropertyGrid';
@@ -105,13 +105,18 @@ export default function SearchFilter() {
           isLoading ? (
             // 로딩 중
             <div className="text-center py-20">
-              <p className="text-gray-500 text-lg">검색 중입니다...</p>
+              <div className="flex flex-col items-center justify-center h-[300px] space-y-2 text-center">
+                <LoaderCircle className="h-10 w-10 animate-spin text-navy-700" />
+                <p className="text-sm text-gray-500">잠시만 기다려 주세요...</p>
+              </div>
             </div>
           ) : filteredProperties.length === 0 ? (
             // 결과 없음
-            <div className="text-center py-12">
-              <Home className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500">검색 결과가 없습니다.</p>
+            <div className="text-center py-20">
+              <div className="flex flex-col items-center justify-center h-[300px] space-y-2 text-center">
+                <Home className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">검색 결과가 없습니다.</p>
+              </div>
             </div>
           ) : (
             // 결과 있음

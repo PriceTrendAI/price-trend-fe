@@ -2,7 +2,7 @@
 'use client';
 
 import { formatPrice } from '../../utils/format';
-import { Slider } from '../ui/slider';
+import { Slider } from '../ui/PriceSlider';
 
 interface PriceSliderProps {
   value: number[];
