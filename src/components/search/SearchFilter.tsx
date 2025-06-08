@@ -7,12 +7,6 @@ import { fetchSearchResults } from '../../api/search';
 import PropertyGrid from '../card/PropertyGrid';
 import type { PropertyCardData } from '../../types/property';
 
-// SearchFilter 컴포넌트의 props 타입 정의
-// interface SearchFilterProps {
-//   initialSearchParams: PropertySearchParams; // 초기 검색 파라미터 (ex. keyword)
-//   onParamsChange: (params: PropertySearchParams) => void; // 상위로 파라미터 전달하는 콜백
-// }
-
 export default function SearchFilter() {
   // 검색어 입력 상태
   const [searchQuery, setSearchQuery] = useState('');
@@ -99,24 +93,20 @@ export default function SearchFilter() {
         </div>
       </div>
 
-      {/* 본문 - 결과 표시 영역 */}
+      {/* 결과 표시 영역 */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         {showResults ? (
           isLoading ? (
-            // 로딩 중
             <div className="text-center py-20">
-              <div className="flex flex-col items-center justify-center h-[300px] space-y-2 text-center">
-                <LoaderCircle className="h-10 w-10 animate-spin text-navy-700" />
-                <p className="text-sm text-gray-500">잠시만 기다려 주세요...</p>
-              </div>
+              <LoaderCircle className="h-14 w-14 animate-spin text-gray-300 mx-auto mb-6" />
+              <h3 className="text-xl font-medium text-gray-500 mb-2">잠시만 기다려 주세요...</h3>
             </div>
           ) : filteredProperties.length === 0 ? (
             // 결과 없음
             <div className="text-center py-20">
-              <div className="flex flex-col items-center justify-center h-[300px] space-y-2 text-center">
-                <Home className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">검색 결과가 없습니다.</p>
-              </div>
+              <Home className="h-16 w-16 text-gray-300 mx-auto mb-6" />
+              <h3 className="text-xl font-medium text-gray-600 mb-2">검색 결과가 없습니다</h3>
+              <p className="text-gray-500">동이나 지역명을 입력하여 부동산 정보를 확인하세요</p>
             </div>
           ) : (
             // 결과 있음
@@ -131,7 +121,7 @@ export default function SearchFilter() {
             </>
           )
         ) : (
-          // 초기 상태 (아직 검색 안 했을 때)
+          // 초기 상태
           <div className="text-center py-20">
             <Home className="h-16 w-16 text-gray-300 mx-auto mb-6" />
             <h3 className="text-xl font-medium text-gray-600 mb-2">부동산을 검색해보세요</h3>
