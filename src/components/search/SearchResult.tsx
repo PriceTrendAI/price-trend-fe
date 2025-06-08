@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { fetchSearchResults, type Apartment } from '../../api/search';
+import type { PropertyCardData } from '../../types/property';
+import { fetchSearchResults } from '../../api/search';
 
 export default function SearchResult() {
   const [searchParams] = useSearchParams();
-  const [results, setResults] = useState<Apartment[]>([]);
+  const [results, setResults] = useState<PropertyCardData[]>([]);
   const [loading, setLoading] = useState(true);
 
   const keyword = useMemo(() => searchParams.get('keyword') || '', [searchParams]);
@@ -42,11 +43,6 @@ export default function SearchResult() {
               <h3 className="text-lg font-semibold">{apt.title}</h3>
               <p className="text-sm text-gray-600">{apt.address}</p>
               <p className="text-sm text-gray-500">{apt.type}</p>
-              <ul className="mt-2 text-sm text-gray-700 list-disc pl-5">
-                {apt.specs.map((spec, i) => (
-                  <li key={i}>{spec}</li>
-                ))}
-              </ul>
             </div>
           ))}
         </div>

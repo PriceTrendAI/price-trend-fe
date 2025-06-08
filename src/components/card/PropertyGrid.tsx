@@ -1,30 +1,17 @@
 import { useState } from 'react';
 import PropertyModal from '../modal/PropertyModal';
 import PropertyCard from './PropertyCard';
-
-export interface PropertyData {
-  id: number;
-  title: string;
-  address: string;
-  price: number;
-  size: number;
-  type: string;
-  imageUrl?: string;
-  rooms: number;
-  bathrooms: number;
-  builtYear: number;
-  description: string;
-}
+import type { PropertyCardData } from '../../types/property';
 
 interface PropertyGridProps {
-  properties: PropertyData[];
+  properties: PropertyCardData[];
 }
 
 export default function PropertyGrid({ properties }: PropertyGridProps) {
-  const [selectedProperty, setSelectedProperty] = useState<PropertyData | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<PropertyCardData | null>(null);
 
-  const handleClick = (id: number) => {
-    const property = properties.find((p) => p.id === id);
+  const handleClick = (index: number) => {
+    const property = properties.find((p) => p.index === index);
     if (property) setSelectedProperty(property);
   };
 
@@ -33,17 +20,19 @@ export default function PropertyGrid({ properties }: PropertyGridProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-[1280px] mx-auto px-4 py-4">
         {properties.map((property) => (
           <PropertyCard
-            key={property.id}
+            key={property.index}
             property={property}
-            onClick={() => handleClick(property.id)}
+            onClick={() => handleClick(property.index)}
           />
         ))}
       </div>
-      <PropertyModal
-        isOpen={!!selectedProperty}
-        onClose={() => setSelectedProperty(null)}
-        property={selectedProperty}
-      />
+      {selectedProperty && (
+        <PropertyModal
+          isOpen={!!selectedProperty}
+          onClose={() => setSelectedProperty(null)}
+          property={selectedProperty}
+        />
+      )}
     </div>
   );
 }

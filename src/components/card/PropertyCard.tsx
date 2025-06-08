@@ -1,69 +1,41 @@
-import { Bookmark, BookmarkCheck, ImageOff } from 'lucide-react';
-
-interface PropertyData {
-  id: number;
-  title: string;
-  address: string;
-  price: number;
-  size: number;
-  type: string;
-  imageUrl?: string;
-}
+import { Building } from 'lucide-react';
+import type { PropertyCardData } from '../../types/property';
 
 interface PropertyCardProps {
-  property: PropertyData;
+  property: PropertyCardData;
   onClick: () => void;
   onToggleScrap?: () => void;
   isScrapped?: boolean;
 }
 
-export default function PropertyCard({
-  property,
-  onClick,
-  onToggleScrap,
-  isScrapped = false,
-}: PropertyCardProps) {
+export default function PropertyCard({ property, onClick }: PropertyCardProps) {
   return (
     <div
-      className="border rounded-lg overflow-hidden shadow hover:shadow-md transition cursor-pointer bg-white"
+      className="relative border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer bg-white"
       onClick={onClick}
     >
-      <div className="relative h-48 w-full bg-gray-200">
-        {property.imageUrl ? (
-          <img
-            src={property.imageUrl}
-            alt={property.title}
-            className="object-cover h-full w-full"
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full bg-[#eaeaea] text-sm">
-            <ImageOff className="w-6 h-6 text-gray-400" />
-          </div>
-        )}
-        {onToggleScrap && (
-          <button
-            className="absolute top-2 right-2 bg-white/80 rounded-full p-1"
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleScrap();
-            }}
-          >
-            {isScrapped ? (
-              <BookmarkCheck className="w-5 h-5 text-blue-600" />
-            ) : (
-              <Bookmark className="w-5 h-5 text-gray-500" />
-            )}
-          </button>
-        )}
+      {/* 상단 배경 or 이미지 */}
+      <div className="relative h-40 w-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+        <span className="text-sm text-gray-400">Price Trend AI</span>
+        <div className="absolute top-2 left-2 bg-white/70 p-1 rounded-full">
+          <Building className="w-4 h-4 text-gray-300" />
+        </div>
       </div>
-      <div className="p-4">
-        <h3 className="font-semibold text-gray-800 mb-1 truncate">{property.title}</h3>
-        <p className="text-sm text-gray-500 mb-2">{property.address}</p>
-        <div className="flex justify-between text-sm text-gray-700">
-          <span className="font-medium">{property.price.toLocaleString()}원</span>
-          <span>
-            {property.size}평 · {property.type}
-          </span>
+
+      {/* 하단 정보 */}
+      <div className="p-4 space-y-1">
+        <h3 className="font-semibold text-gray-800 text-base truncate">{property.title}</h3>
+        <p className="text-sm text-gray-500 truncate">{property.address}</p>
+
+        <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-600">
+          <div>
+            <span className="font-medium text-gray-500">유형: </span>
+            {property.type}
+          </div>
+          <div className="col-span-2">
+            <span className="font-medium text-gray-500">면적: </span>
+            {property.area}
+          </div>
         </div>
       </div>
     </div>
