@@ -2,17 +2,34 @@ import { useState } from 'react';
 import PropertyModal from '../modal/PropertyModal';
 import PropertyCard from './PropertyCard';
 import type { PropertyCardData } from '../../types/property';
+import { fetchPropertyDetails } from '../../api/search';
 
-interface PropertyGridProps {
-  properties: PropertyCardData[];
-}
-
-export default function PropertyGrid({ properties }: PropertyGridProps) {
+export default function PropertyGrid({ properties }: { properties: PropertyCardData[] }) {
   const [selectedProperty, setSelectedProperty] = useState<PropertyCardData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [fullProperty, setFullProperty] = useState<any>(null);
 
-  const handleClick = (index: number) => {
-    const property = properties.find((p) => p.index === index);
-    if (property) setSelectedProperty(property);
+  const handleClick = async (property: PropertyCardData) => {
+    setSelectedProperty(property);
+    setIsModalOpen(true);
+    setIsLoading(true);
+    try {
+      const details = await fetchPropertyDetails(property.title);
+      const combined = { ...property, ...details };
+      setFullProperty(combined);
+    } catch (e) {
+      console.error('상세 정보 불러오기 실패', e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+    setSelectedProperty(null);
+    setFullProperty(null);
+    setIsLoading(false);
   };
 
   return (
@@ -22,15 +39,17 @@ export default function PropertyGrid({ properties }: PropertyGridProps) {
           <PropertyCard
             key={property.index}
             property={property}
-            onClick={() => handleClick(property.index)}
+            onClick={() => handleClick(property)}
           />
         ))}
       </div>
-      {selectedProperty && (
+
+      {isModalOpen && selectedProperty && (
         <PropertyModal
-          isOpen={!!selectedProperty}
-          onClose={() => setSelectedProperty(null)}
-          property={selectedProperty}
+          isOpen={isModalOpen}
+          onClose={handleClose}
+          property={fullProperty ?? selectedProperty}
+          isLoading={isLoading}
         />
       )}
     </div>

@@ -15,7 +15,7 @@ export interface PropertyCardData {
   area: string;
 }
 
-export interface 상세정보 {
+export interface PropertyComplexInfo {
   세대수: string;
   '저/최고층': string;
   사용승인일: string;

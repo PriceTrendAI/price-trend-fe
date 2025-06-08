@@ -1,4 +1,3 @@
-// src/api/search.ts
 import axios from 'axios';
 import type { PropertyCardData } from '../types/property';
 
@@ -11,4 +10,22 @@ export async function fetchSearchResults(keyword: string): Promise<PropertyCardD
     params: { keyword },
   });
   return response.data.results;
+}
+
+export async function fetchPropertyDetails(keyword: string) {
+  const response = await axios.get('http://127.0.0.1:8000/complex-info', {
+    params: { keyword },
+  });
+  return response.data;
+}
+
+export async function fetchPricePrediction(keyword: string, area: string, deal_type: string) {
+  const response = await axios.get('http://127.0.0.1:8000/all-info', {
+    params: {
+      keyword,
+      area: area.replace('㎡', ''),
+      deal_type,
+    },
+  });
+  return response.data;
 }
