@@ -1,29 +1,56 @@
-import { useLocation } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { fetchSearchResults, type Apartment } from '../../api/search';
 
 export default function SearchResult() {
-  const { search } = useLocation();
-  const params = new URLSearchParams(search);
+  const [searchParams] = useSearchParams();
+  const [results, setResults] = useState<Apartment[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const location = params.get('location');
-  const dealType = params.get('dealType');
-  const propertyType = params.get('propertyType');
-  const size = params.get('size');
+  const keyword = useMemo(() => searchParams.get('keyword') || '', [searchParams]);
 
-  const hasSearch = location && dealType && propertyType;
+  useEffect(() => {
+    if (!keyword) return;
 
-  if (!hasSearch) return null;
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchSearchResults(keyword);
+        setResults(data);
+      } catch (err) {
+        console.error('검색 실패', err);
+        setResults([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [keyword]);
 
   return (
-    <div>
-      <div className="max-w-[1280px] mx-auto px-4">
-        <h2 className="text-xl font-semibold mb-4 text-navy-800">검색 결과</h2>
-        <ul className="list-disc pl-5 text-gray-800 space-y-1">
-          <li>지역: {location}</li>
-          <li>거래유형: {dealType}</li>
-          <li>매물유형: {propertyType}</li>
-          {size && <li>면적: {size}㎡</li>}
-        </ul>
-      </div>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <h2 className="text-2xl font-bold mb-4">검색 결과</h2>
+      {loading ? (
+        <p>로딩 중...</p>
+      ) : results.length === 0 ? (
+        <p>결과가 없습니다.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {results.map((apt) => (
+            <div key={apt.index} className="border rounded p-4 shadow bg-white">
+              <h3 className="text-lg font-semibold">{apt.title}</h3>
+              <p className="text-sm text-gray-600">{apt.address}</p>
+              <p className="text-sm text-gray-500">{apt.type}</p>
+              <ul className="mt-2 text-sm text-gray-700 list-disc pl-5">
+                {apt.specs.map((spec, i) => (
+                  <li key={i}>{spec}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
