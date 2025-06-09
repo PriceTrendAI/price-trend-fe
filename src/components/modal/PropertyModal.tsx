@@ -33,7 +33,30 @@ export default function PropertyModal({
     setIsPredicting(true);
     try {
       const res = await fetchPricePrediction(property.title, selectedArea, dealType);
-      setAiChartData(res);
+      
+      const forecastData = res.forecast_json;
+
+      const parsed = Object.entries(forecastData).map(([date, v]) => ({
+        date,
+        actual: v.actual ?? null,
+        predicted: v.predicted,
+        lower: v.lower,
+        upper: v.upper,
+        band: v.upper - v.lower,
+      }));
+
+      const lastActualIndex = parsed.reduce(
+        (acc, cur, idx) => (cur.actual !== null ? idx : acc),
+        -1
+      );
+
+      const final = parsed.map((d, idx) => ({
+        ...d,
+        predictedBefore: idx <= lastActualIndex ? d.predicted : undefined,
+        predictedAfter: idx > lastActualIndex ? d.predicted : undefined,
+      }));
+
+      setAiChartData(final);
     } catch (err) {
       console.error('예측 실패:', err);
     } finally {
