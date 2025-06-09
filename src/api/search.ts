@@ -29,3 +29,13 @@ export async function fetchPricePrediction(keyword: string, area: string, deal_t
   });
   return response.data;
 }
+
+export async function fetchAllHistory(): Promise<PropertyCardData[]> {
+  const res = await axios.get('http://127.0.0.1:8000/apartments');
+  return res.data;
+}
+
+export async function fetchHistoryDetail(id: number): Promise<PropertyCardData> {
+  const res = await axios.get(`http://127.0.0.1:8000/apartments/${id}`);
+  return res.data;
+}
