@@ -39,3 +39,8 @@ export async function fetchHistoryDetail(id: number): Promise<PropertyCardData> 
   const res = await axios.get(`http://127.0.0.1:8000/apartments/${id}`);
   return res.data;
 }
+
+export async function deleteHistoryDetail(id: number): Promise<PropertyCardData> {
+  const res = await axios.delete(`http://127.0.0.1:8000/apartments/${id}`);
+  return res.data;
+}

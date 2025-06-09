@@ -18,7 +18,7 @@ export default function Layout({ children }: LayoutProps) {
                 Home
               </a>
               <a href="/history" className="text-gray-600 hover:text-navy-700">
-                history
+                History
               </a>
             </nav>
           </div>

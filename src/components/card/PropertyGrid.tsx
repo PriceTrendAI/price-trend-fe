@@ -37,7 +37,7 @@ export default function PropertyGrid({ properties }: { properties: PropertyCardD
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-[1280px] mx-auto px-4 py-4">
         {properties.map((property) => (
           <PropertyCard
-            key={property.index}
+            key={property.id}
             property={property}
             onClick={() => handleClick(property)}
           />

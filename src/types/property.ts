@@ -5,7 +5,7 @@ export interface PropertySearchParams {
 }
 
 export interface PropertyCardData {
-  index: number;
+  id: number;
   title: string;
   address: string;
   type: string;

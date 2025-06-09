@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Area, Scatter } from 'recharts';
 import type { ForecastPoint } from '../../types/property';
 
