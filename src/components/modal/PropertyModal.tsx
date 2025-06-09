@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import RechartsPriceChart from '../chart/PriceChart';
 import { fetchPricePrediction } from '../../api/search';
-import { LoaderCircle, X } from 'lucide-react';
+import { LoaderCircle, RefreshCw, X } from 'lucide-react';
+import type { ForecastPoint } from '../../types/property';
+import ForecastChart from '../chart/ForecastChart';
 
 interface PropertyModalProps {
   isOpen: boolean;
@@ -21,20 +22,22 @@ export default function PropertyModal({
   const [tab, setTab] = useState<'info' | 'price'>('info');
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [dealType, setDealType] = useState<'매매' | '전세' | '월세'>('매매');
-  const [aiChartData, setAiChartData] = useState<any[]>([]);
+  const [aiChartData, setAiChartData] = useState<ForecastPoint[]>([]);
+  const [isPredicting, setIsPredicting] = useState(false);
 
   const info = property?.complex_info || {};
-
   if (!isOpen || !property) return null;
 
-  const handleAIPredict = async () => {
+  const handlePredict = async () => {
     if (!selectedArea || !property.title || !dealType) return;
-
+    setIsPredicting(true);
     try {
-      const data = await fetchPricePrediction(property.title, selectedArea, dealType);
-      setAiChartData(data.price_data);
+      const res = await fetchPricePrediction(property.title, selectedArea, dealType);
+      setAiChartData(res);
     } catch (err) {
-      console.error('AI 예측 요청 실패:', err);
+      console.error('예측 실패:', err);
+    } finally {
+      setIsPredicting(false);
     }
   };
 
@@ -55,6 +58,7 @@ export default function PropertyModal({
           </div>
         ) : (
           <>
+            {/* 탭 */}
             <div className="border-b px-6 pt-4">
               <div className="grid grid-cols-2 w-full">
                 {['info', 'price'].map((key) => (
@@ -73,6 +77,7 @@ export default function PropertyModal({
               </div>
             </div>
 
+            {/* 탭 내용 */}
             <div className="p-6">
               {tab === 'info' && (
                 <div className="space-y-4">
@@ -107,7 +112,7 @@ export default function PropertyModal({
                       AI 기반 예측 결과입니다. 실제 시세와 예측값을 확인하세요.
                     </p>
                   </div>
-
+                  {/* 거래 유형 선택 */}
                   <div className="flex gap-4 mb-4">
                     {['매매', '전세', '월세'].map((type) => (
                       <label key={type} className="flex items-center gap-1 text-sm text-gray-700">
@@ -122,7 +127,7 @@ export default function PropertyModal({
                       </label>
                     ))}
                   </div>
-
+                  {/* 면적 선택 */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {info?.['면적']?.split(',').map((area: string) => (
                       <button
@@ -138,23 +143,19 @@ export default function PropertyModal({
                       </button>
                     ))}
                   </div>
-
+                  {/* 예측 버튼 */}
                   <button
-                    onClick={handleAIPredict}
-                    disabled={!selectedArea}
-                    className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-md disabled:opacity-50"
+                    onClick={handlePredict}
+                    disabled={!selectedArea || isPredicting}
+                    className="mb-4 px-4 py-2 text-sm border border-blue-200 rounded-md text-blue-600 hover:bg-blue-50 disabled:opacity-50 flex items-center"
                   >
+                    <RefreshCw className={`mr-2 h-4 w-4 ${isPredicting ? 'animate-spin' : ''}`} />
                     AI 예측 요청
                   </button>
 
+                  {/* 차트 렌더링 */}
                   <div className="h-[400px]">
-                    <RechartsPriceChart data={aiChartData} />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                    <Stat label="현재 시세" value="9억 5,000만원" />
-                    <Stat label="예측 상한가" value="10억 5,000만원" color="green" />
-                    <Stat label="예측 하한가" value="9억원" color="red" />
+                    <ForecastChart data={aiChartData} />
                   </div>
                 </>
               )}
@@ -171,29 +172,6 @@ function Info({ label, value }: { label: string; value?: string }) {
     <div>
       <h4 className="text-sm font-medium text-gray-500">{label}</h4>
       <p className="text-sm text-gray-800">{value ?? '-'}</p>
-    </div>
-  );
-}
-
-function Stat({
-  label,
-  value,
-  color = 'gray',
-}: {
-  label: string;
-  value: string;
-  color?: 'gray' | 'green' | 'red';
-}) {
-  const colorMap = {
-    gray: 'text-gray-900',
-    green: 'text-green-600',
-    red: 'text-red-600',
-  };
-
-  return (
-    <div className="p-4 border rounded-lg">
-      <h4 className="text-sm font-medium text-gray-500">{label}</h4>
-      <p className={`text-lg font-bold ${colorMap[color]}`}>{value}</p>
     </div>
   );
 }

@@ -29,3 +29,14 @@ export interface PropertyComplexInfo {
   도로명주소: string;
   면적: string;
 }
+
+export interface ForecastPoint {
+  date: string;
+  actual: number | null;
+  predicted: number;
+  lower: number;
+  upper: number;
+  band: number;
+  predictedBefore?: number;
+  predictedAfter?: number;
+}
