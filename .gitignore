@@ -1,3 +1,22 @@
+# Env
+.env
+.env.local
+
+# Build outputs
+dist
+dist-ssr
+coverage/
+*.tsbuildinfo
+
+# IDE & OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
+# Dependency folders
+node_modules
+
 # Logs
 logs
 *.log
@@ -7,16 +26,12 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Vercel / Next.js / Turborepo (optional)
+.vercel/
+.next/
+.turbo/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
+# VS / Windows files
 *.suo
 *.ntvs*
 *.njsproj
