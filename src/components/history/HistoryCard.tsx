@@ -1,4 +1,4 @@
-import { CircleX } from 'lucide-react';
+import { Calendar, CircleX } from 'lucide-react';
 import type { ApartmentDetailData } from '../../types/property';
 
 interface HistoryCardProps {
@@ -50,8 +50,10 @@ export default function HistoryCard({ property, onClick, onDelete }: HistoryCard
             {area}
           </div>
           <div>
-            <span className="font-medium text-gray-500">조회일: </span>
-            {createdAt}
+            <div className="flex items-center gap-1 text-xs text-gray-500 pt-2 border-t">
+              <Calendar className="w-3 h-3" />
+              <span>조회일: {createdAt}</span>
+            </div>
           </div>
         </div>
       </div>
