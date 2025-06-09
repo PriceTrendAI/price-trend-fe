@@ -27,15 +27,15 @@ export default function ForecastChart({ data }: ForecastChartProps) {
   useEffect(() => {
     if (data.length > 0) {
       setEnableAnimation(false);
-      setShowAfterLine(false); // ← 초기화
+      setShowAfterLine(false);
 
       const enableAnimationTimer = setTimeout(() => {
         setEnableAnimation(true);
-      }, 50); // 50ms 후 애니메이션 시작
+      }, 50);
 
       const showAfterLineTimer = setTimeout(() => {
         setShowAfterLine(true);
-      }, 1250); // ← 파란선 애니메이션 끝난 후
+      }, 1250);
 
       return () => {
         clearTimeout(enableAnimationTimer);

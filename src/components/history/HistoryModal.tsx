@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { X, RefreshCw } from 'lucide-react';
+import { X } from 'lucide-react';
 import ForecastChart from '../chart/ForecastChart';
 import type { ApartmentDetailData } from '../../types/property';
 
@@ -13,17 +13,14 @@ interface HistoryModalProps {
 
 export default function HistoryModal({ isOpen, onClose, property }: HistoryModalProps) {
   const [tab, setTab] = useState<'info' | 'price'>('info');
-  const [dealType, setDealType] = useState<'매매' | '전세' | '월세'>('매매');
-  const [selectedArea, setSelectedArea] = useState<string | null>(null);
-  const [isPredicting, setIsPredicting] = useState(false);
   const [aiChartData, setAiChartData] = useState<any[]>([]);
+  // const [isPredicting, setIsPredicting] = useState(false);
 
   const feature = property?.summary_data?.feature || {};
   const complex = property?.complex_info || {};
   const title = property?.summary_data?.title || property?.complex_name || '-';
   const address = complex.도로명주소 || complex.지번주소 || '-';
   const areaString = complex.면적 || feature.면적 || '';
-  const areas = areaString.split(',').map((a) => a.trim());
 
   const forecastEntries = property?.forecast_json ?? {};
   const parsed = Object.entries(forecastEntries)
@@ -48,22 +45,17 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
     if (property && initialChartData.length > 0) {
       setAiChartData(initialChartData);
     }
-
-    if (!selectedArea) {
-      const defaultArea = areas[0];
-      setSelectedArea(defaultArea || null);
-    }
   }, [property]);
 
   if (!isOpen || !property) return null;
 
-  const handlePredict = async () => {
-    setIsPredicting(true);
-    setTimeout(() => {
-      setAiChartData(initialChartData);
-      setIsPredicting(false);
-    }, 500);
-  };
+  // const handlePredict = async () => {
+  //   setIsPredicting(true);
+  //   setTimeout(() => {
+  //     setAiChartData(initialChartData);
+  //     setIsPredicting(false);
+  //   }, 500);
+  // };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4">
@@ -123,50 +115,33 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
 
           {tab === 'price' && (
             <>
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold mb-2">가격 예측 분석</h3>
-                <p className="text-sm text-gray-600">
-                  AI 기반 예측 결과입니다. 실제 시세와 예측값을 확인하세요.
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold text-gray-800 mb-1">가격 예측 분석</h3>
+                <p className="text-sm text-gray-500">
+                  DB에 저장된 예측 결과입니다. 실제 시세와 예측값을 확인하세요.
                 </p>
               </div>
-
-              <div className="flex gap-4 mb-4">
-                {['매매', '전세', '월세'].map((type) => (
-                  <label key={type} className="flex items-center gap-1 text-sm text-gray-700">
-                    <input
-                      type="radio"
-                      name="dealType"
-                      value={type}
-                      checked={dealType === type}
-                      onChange={() => setDealType(type as '매매' | '전세' | '월세')}
-                    />
-                    {type}
-                  </label>
-                ))}
+              <div>
+                <ul className="space-y-1 text-sm text-gray-700 mb-2 list-none">
+                  <li>
+                    <span className="font-medium text-gray-600 inline-block w-20">거래유형</span>
+                    <span>{property.deal_type ?? '-'}</span>
+                  </li>
+                  <li>
+                    <span className="font-medium text-gray-600 inline-block w-20">면적</span>
+                    <span>{property.area_detail?.area || property.complex_info?.면적 || '-'}</span>
+                  </li>
+                </ul>
               </div>
 
-              <div className="flex flex-wrap gap-2 mb-4">
-                {areas.map((area) => (
-                  <button
-                    key={area}
-                    onClick={() => setSelectedArea(area)}
-                    className={`px-3 py-1 border rounded-full text-sm ${
-                      selectedArea === area ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'
-                    }`}
-                  >
-                    {area}
-                  </button>
-                ))}
-              </div>
-
-              <button
+              {/* <button
                 onClick={handlePredict}
-                disabled={!selectedArea || isPredicting}
+                disabled={isPredicting}
                 className="mb-4 px-4 py-2 text-sm border border-blue-200 rounded-md text-blue-600 hover:bg-blue-50 disabled:opacity-50 flex items-center"
               >
                 <RefreshCw className={`mr-2 h-4 w-4 ${isPredicting ? 'animate-spin' : ''}`} />
                 AI 예측 요청
-              </button>
+              </button> */}
 
               <div className="h-[400px]">
                 <ForecastChart data={aiChartData} />
