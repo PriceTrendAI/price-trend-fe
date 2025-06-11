@@ -75,7 +75,7 @@ export default function HistoryGrid() {
           <p className="text-gray-500">조회된 기록이 없습니다.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-[1280px] mx-auto px-4 ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-[1280px] mx-auto px-4 pb-12">
           {sortedHistory.map((item) => (
             <HistoryCard
               key={item.id}

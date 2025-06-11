@@ -1,11 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { MapPin, Search } from 'lucide-react';
+import { MapPin, Search, X } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { fetchSearchResults } from '../../api/search';
 import type { PropertyCardData } from '../../types/property';
 import SearchResult from './SearchResult';
+
+const RECENT_KEY = 'recent_keywords';
+const MAX_RECENT = 5;
 
 export default function SearchFilter() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,59 +18,73 @@ export default function SearchFilter() {
   const [isFocused, setIsFocused] = useState(false);
   const [hasQueried, setHasQueried] = useState(false);
   const [confirmedQuery, setConfirmedQuery] = useState('');
+  const [recentKeywords, setRecentKeywords] = useState<string[]>([]);
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const keywordFromQuery = useMemo(() => searchParams.get('keyword') || '', [searchParams]);
 
-  // 검색 요청 함수
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(RECENT_KEY);
+      if (stored) setRecentKeywords(JSON.parse(stored));
+    } catch {
+      setRecentKeywords([]);
+    }
+  }, []);
+
+  const saveRecentKeyword = useCallback((keyword: string) => {
+    setRecentKeywords((prev) => {
+      const updated = [keyword, ...prev.filter((k) => k !== keyword)].slice(0, MAX_RECENT);
+      localStorage.setItem(RECENT_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  const removeRecentKeyword = (keyword: string) => {
+    const updated = recentKeywords.filter((k) => k !== keyword);
+    setRecentKeywords(updated);
+    localStorage.setItem(RECENT_KEY, JSON.stringify(updated));
+  };
+
   const handleSearch = useCallback(
     async (keywordParam?: string) => {
       const keyword = keywordParam || searchQuery.trim();
       if (!keyword) return;
+
+      saveRecentKeyword(keyword);
+      navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
 
       try {
         setIsLoading(true);
         setShowResults(true);
         const response = await fetchSearchResults(keyword);
         setFilteredProperties(Array.isArray(response) ? response : []);
-      } catch (error) {
-        console.error('검색 실패:', error);
+        setConfirmedQuery(keyword);
+      } catch {
         setFilteredProperties([]);
+        setConfirmedQuery(keyword);
       } finally {
         setIsLoading(false);
       }
     },
-    [searchQuery],
+    [searchQuery, navigate, saveRecentKeyword],
   );
 
-  // 검색 버튼 or Enter 눌렀을 때
-  const onSearchClick = useCallback(() => {
-    const keyword = searchQuery.trim();
-    if (!keyword) return;
-    setConfirmedQuery(keyword);
-    navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
-    handleSearch(keyword);
-  }, [searchQuery, navigate, handleSearch]);
-
-  // URL 쿼리 기반 최초 검색 1회
   useEffect(() => {
     if (!hasQueried && keywordFromQuery) {
       setSearchQuery(keywordFromQuery);
-      setConfirmedQuery(keywordFromQuery);
       handleSearch(keywordFromQuery);
       setHasQueried(true);
     }
   }, [keywordFromQuery, handleSearch, hasQueried]);
 
-  // 입력값 변경 핸들링 (검색결과는 그대로 둠)
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-[6.5rem]">
-      {/* Title */}
       <div className="text-center mb-12">
         <div className="py-6">
           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
@@ -79,7 +96,7 @@ export default function SearchFilter() {
         <p className="text-gray-600">타겟 부동산을 입력하여 부동산 정보를 예측해 보세요</p>
       </div>
 
-      <div className="relative max-w-2xl mx-auto mb-16">
+      <div className="relative max-w-2xl mx-auto mb-6">
         <div
           className={`bg-white rounded-2xl shadow-lg border-2 transition-all duration-300 ${
             isFocused
@@ -88,35 +105,53 @@ export default function SearchFilter() {
           }`}
         >
           <div className="flex items-center relative">
-            {/* Icon: Search */}
             <div className="pl-4">
               <Search className="h-5 w-5 text-gray-400" />
             </div>
-
-            {/* Input */}
             <input
               type="text"
               value={searchQuery}
               onChange={handleInputChange}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              onKeyDown={(e) => e.key === 'Enter' && onSearchClick()}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               placeholder="검색할 지역 또는 건물명을 입력해 주세요 (예: 역삼동, 래미안 블레스티지)"
               className="flex-1 px-4 py-5 text-lg border-0 rounded-2xl focus:ring-0 focus:outline-none bg-transparent placeholder:text-gray-400"
             />
-
-            {/* Search Button */}
             <button
-              onClick={onSearchClick}
-              className="mr-4 bg-navy-700 hover:shadow-md transition-shadow duration-200 text-white font-medium px-6 py-2 rounded-xl text-sm ease-in-out"
+              onClick={() => handleSearch()}
+              className="mr-4 bg-navy-700 hover:shadow-md transition-shadow duration-200 text-white font-medium px-6 py-2 rounded-xl text-sm"
             >
               검색
             </button>
           </div>
         </div>
+
+        {recentKeywords.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2 text-sm text-gray-600">
+            {recentKeywords.map((kw) => (
+              <div
+                key={kw}
+                className="flex items-center bg-gray-100 px-3 py-1 rounded-full hover:bg-gray-200 cursor-pointer"
+                onClick={() => {
+                  setSearchQuery(kw);
+                  handleSearch(kw);
+                }}
+              >
+                <span>{kw}</span>
+                <X
+                  className="w-4 h-4 ml-1 hover:text-red-400"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeRecentKeyword(kw);
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Results */}
       <SearchResult
         isLoading={isLoading}
         filteredProperties={filteredProperties}
