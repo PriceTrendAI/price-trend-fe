@@ -18,7 +18,7 @@ export default function SearchResult({
   if (!showResults) {
     return (
       <>
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid md:grid-cols-3 gap-8 py-8">
           <div className="text-center p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
             <div className="inline-flex items-center justify-center w-12 h-12 bg-navy-100 rounded-lg mb-4">
               <Search className="h-6 w-6 text-navy-600" />

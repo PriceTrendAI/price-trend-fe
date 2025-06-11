@@ -1,4 +1,3 @@
-// PriceSlider.tsx
 'use client';
 
 import { formatPrice } from '../../utils/format';
@@ -13,7 +12,7 @@ export default function PriceSlider({ value, onChange }: PriceSliderProps) {
   const formatPriceRange = (val: number) => {
     if (val === 0) return '0원';
     if (val < 10000) return `${val}만원`;
-    return formatPrice(val); // 예: 1억
+    return formatPrice(val);
   };
 
   return (
