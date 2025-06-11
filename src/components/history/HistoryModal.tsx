@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { X } from 'lucide-react';
 import ForecastChart from '../chart/ForecastChart';
 import type { ApartmentDetailData } from '../../types/property';
@@ -14,7 +14,6 @@ interface HistoryModalProps {
 export default function HistoryModal({ isOpen, onClose, property }: HistoryModalProps) {
   const [tab, setTab] = useState<'info' | 'price'>('info');
   const [aiChartData, setAiChartData] = useState<any[]>([]);
-  // const [isPredicting, setIsPredicting] = useState(false);
 
   const feature = property?.summary_data?.feature || {};
   const complex = property?.complex_info || {};
@@ -22,40 +21,34 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
   const address = complex.도로명주소 || complex.지번주소 || '-';
   const areaString = complex.면적 || feature.면적 || '';
 
-  const forecastEntries = property?.forecast_json ?? {};
-  const parsed = Object.entries(forecastEntries)
-    .map(([date, data]) => ({
-      date,
-      actual: data.actual ?? null,
-      predicted: data.predicted,
-      lower: data.lower,
-      upper: data.upper,
-      band: data.upper - data.lower,
-    }))
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const initialChartData = useMemo(() => {
+    if (!property) return [];
+    const forecastEntries = property?.forecast_json ?? {};
+    const parsed = Object.entries(forecastEntries)
+      .map(([date, data]) => ({
+        date,
+        actual: data.actual ?? null,
+        predicted: data.predicted,
+        lower: data.lower,
+        upper: data.upper,
+        band: data.upper - data.lower,
+      }))
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  const lastActualIndex = parsed.reduce((acc, cur, idx) => (cur.actual !== null ? idx : acc), -1);
+    const lastActualIndex = parsed.reduce((acc, cur, idx) => (cur.actual !== null ? idx : acc), -1);
 
-  const initialChartData = parsed.map((d, idx) => ({
-    ...d,
-    predictedBefore: idx <= lastActualIndex ? d.predicted : undefined,
-    predictedAfter: idx > lastActualIndex ? d.predicted : undefined,
-  }));
-  useEffect(() => {
-    if (property && initialChartData.length > 0) {
-      setAiChartData(initialChartData);
-    }
+    return parsed.map((d, idx) => ({
+      ...d,
+      predictedBefore: idx <= lastActualIndex ? d.predicted : undefined,
+      predictedAfter: idx > lastActualIndex ? d.predicted : undefined,
+    }));
   }, [property]);
 
-  if (!isOpen || !property) return null;
+  useEffect(() => {
+    setAiChartData(initialChartData);
+  }, [initialChartData]);
 
-  // const handlePredict = async () => {
-  //   setIsPredicting(true);
-  //   setTimeout(() => {
-  //     setAiChartData(initialChartData);
-  //     setIsPredicting(false);
-  //   }, 500);
-  // };
+  if (!isOpen || !property) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4">
@@ -86,7 +79,8 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
         </div>
 
         <div className="p-6">
-          {tab === 'info' && (
+          {/* 단지 정보 탭 */}
+          <div className={tab === 'info' ? 'block' : 'hidden'}>
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Info label="건물 유형" value={feature.유형} />
@@ -111,51 +105,45 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
                 </div>
               )}
             </div>
-          )}
+          </div>
 
-          {tab === 'price' && (
-            <>
-              <div className="mb-6">
-                <h3 className="text-xl font-semibold text-gray-800 mb-1">가격 예측 분석</h3>
-                <p className="text-sm text-gray-500">
-                  DB에 저장된 예측 결과입니다. 실제 시세와 예측값을 확인하세요.
-                </p>
+          {/* 가격 분석 탭 */}
+          <div className={tab === 'price' ? 'block' : 'hidden'}>
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-1">가격 예측 분석</h3>
+              <p className="text-sm text-gray-500">
+                DB에 저장된 예측 결과입니다. 실제 시세와 예측값을 확인하세요.
+              </p>
+            </div>
+            <ul className="space-y-1 text-sm text-gray-700 mb-2 list-none">
+              <li>
+                <span className="font-medium text-gray-600 inline-block w-20">거래유형</span>
+                <span>{property.deal_type ?? '-'}</span>
+              </li>
+              <li>
+                <span className="font-medium text-gray-600 inline-block w-20">면적</span>
+                <span>{property.area_detail?.area || property.complex_info?.면적 || '-'}</span>
+              </li>
+              <li>
+                <span className="font-medium text-gray-600 inline-block w-20">조회일</span>
+                <span>
+                  {property.created_at?.slice(0, 16).replace('T', ' ') ||
+                    property.updated_at?.slice(0, 16).replace('T', ' ') ||
+                    '-'}
+                </span>
+              </li>
+            </ul>
+
+            {aiChartData.length === 0 ? (
+              <div className="text-center text-gray-500 text-sm h-[400px] flex items-center justify-center border rounded">
+                예측 데이터가 존재하지 않습니다.
               </div>
-              <div>
-                <ul className="space-y-1 text-sm text-gray-700 mb-2 list-none">
-                  <li>
-                    <span className="font-medium text-gray-600 inline-block w-20">거래유형</span>
-                    <span>{property.deal_type ?? '-'}</span>
-                  </li>
-                  <li>
-                    <span className="font-medium text-gray-600 inline-block w-20">면적</span>
-                    <span>{property.area_detail?.area || property.complex_info?.면적 || '-'}</span>
-                  </li>
-                  <li>
-                    <span className="font-medium text-gray-600 inline-block w-20">조회일</span>
-                    <span>
-                      {property.created_at?.slice(0, 16).replace('T', ' ') ||
-                        property.updated_at?.slice(0, 16).replace('T', ' ') ||
-                        '-'}
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* <button
-                onClick={handlePredict}
-                disabled={isPredicting}
-                className="mb-4 px-4 py-2 text-sm border border-blue-200 rounded-md text-blue-600 hover:bg-blue-50 disabled:opacity-50 flex items-center"
-              >
-                <RefreshCw className={`mr-2 h-4 w-4 ${isPredicting ? 'animate-spin' : ''}`} />
-                AI 예측 요청
-              </button> */}
-
+            ) : (
               <div className="h-[400px]">
                 <ForecastChart data={aiChartData} />
               </div>
-            </>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>
