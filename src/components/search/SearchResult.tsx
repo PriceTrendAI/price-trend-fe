@@ -23,9 +23,10 @@ export default function SearchResult({
             <div className="inline-flex items-center justify-center w-12 h-12 bg-navy-100 rounded-lg mb-4">
               <Search className="h-6 w-6 text-navy-600" />
             </div>
-            <h4 className="text-lg font-semibold text-gray-900 mb-2">AI 가격 예측</h4>
+            <h4 className="text-lg font-semibold text-navy-800 mb-2">AI 가격 예측</h4>
             <p className="text-gray-600 text-sm">
-              머신러닝 기반으로 정확한 부동산 가격을 예측합니다
+              머신러닝 기반으로 정확한 <br />
+              부동산 가격을 예측합니다
             </p>
           </div>
 
@@ -33,9 +34,10 @@ export default function SearchResult({
             <div className="inline-flex items-center justify-center w-12 h-12 bg-navy-100 rounded-lg mb-4">
               <Building className="h-6 w-6 text-navy-600" />
             </div>
-            <h4 className="text-lg font-semibold text-gray-900 mb-2">실시간 데이터</h4>
+            <h4 className="text-lg font-semibold text-navy-800 mb-2">실시간 데이터</h4>
             <p className="text-gray-600 text-sm">
-              최신 거래 정보와 시장 동향을 실시간으로 반영합니다
+              최신 거래 정보와 시장 동향을 <br />
+              실시간으로 반영합니다
             </p>
           </div>
 
@@ -43,9 +45,10 @@ export default function SearchResult({
             <div className="inline-flex items-center justify-center w-12 h-12 bg-navy-100 rounded-lg mb-4">
               <ChartNoAxesCombined className="h-6 w-6 text-navy-600" />
             </div>
-            <h4 className="text-lg font-semibold text-gray-900 mb-2">가격 추이 시각화</h4>
+            <h4 className="text-lg font-semibold text-navy-800 mb-2">가격 추이 시각화</h4>
             <p className="text-gray-600 text-sm">
-              예측된 가격 변동을 그래프로 제공해 흐름을 쉽게 파악할 수 있습니다
+              예측된 가격 변동을 그래프로 제공해 <br />
+              흐름을 쉽게 파악할 수 있습니다
             </p>
           </div>
         </div>
@@ -57,7 +60,8 @@ export default function SearchResult({
     return (
       <div className="text-center py-20">
         <LoaderCircle className="h-14 w-14 animate-spin text-gray-300 mx-auto mb-6" />
-        <h3 className="text-xl font-medium text-gray-500 mb-2">잠시만 기다려 주세요...</h3>
+        <h3 className="text-xl font-medium text-gray-600 mb-2">정보를 불러오고 있습니다</h3>
+        <p className="text-gray-500">잠시만 기다려주세요...</p>
       </div>
     );
   }

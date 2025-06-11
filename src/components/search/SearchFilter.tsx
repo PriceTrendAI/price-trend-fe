@@ -63,7 +63,7 @@ export default function SearchFilter() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-28">
       {/* Title */}
       <div className="text-center mb-12">
         <div className="mb-6">
@@ -76,44 +76,40 @@ export default function SearchFilter() {
         <p className="text-gray-600">타겟부동산을 입력하여 부동산 정보를 예측해보세요</p>
       </div>
 
-      {/* Search Input */}
       <div className="relative max-w-2xl mx-auto mb-16">
         <div
-          className={`relative bg-white rounded-2xl shadow-lg border-2 transition-all duration-300 ${
+          className={`bg-white rounded-2xl shadow-lg border-2 transition-all duration-300 ${
             isFocused
-              ? 'border-navy-500 shadow-xl ring-4 ring-navy-100'
+              ? 'border-navy-500 shadow-xl ring-2 ring-navy-100'
               : 'border-gray-200 hover:border-gray-300'
           }`}
         >
-          {/* Icon: Search */}
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-0">
-            <Search className="h-5 w-5 text-gray-400" />
+          <div className="flex items-center relative">
+            {/* Icon: Search */}
+            <div className="pl-4">
+              <Search className="h-5 w-5 text-gray-400" />
+            </div>
+
+            {/* Input */}
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleInputChange}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              onKeyDown={(e) => e.key === 'Enter' && onSearchClick()}
+              placeholder="건물명을 입력하세요 (예: 월드메르디앙, 푸르지오)"
+              className="flex-1 px-4 py-5 text-lg border-0 rounded-2xl focus:ring-0 focus:outline-none bg-transparent placeholder:text-gray-400"
+            />
+
+            {/* Search Button */}
+            <button
+              onClick={onSearchClick}
+              className="mr-4 bg-navy-700 hover:shadow-md transition-shadow duration-200 text-white font-medium px-6 py-2 rounded-xl text-sm ease-in-out"
+            >
+              검색
+            </button>
           </div>
-
-          {/* Icon: Location */}
-          <div className="absolute left-12 top-1/2 transform -translate-y-1/2 z-0">
-            <MapPin className="h-4 w-4 text-navy-500" />
-          </div>
-
-          {/* Input */}
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleInputChange}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            onKeyDown={(e) => e.key === 'Enter' && onSearchClick()}
-            placeholder="건물명을 입력하세요 (예: 월드메르디앙, 푸르지오)"
-            className="relative z-20 w-full pl-20 pr-32 py-5 text-lg border-0 rounded-2xl focus:ring-0 focus:outline-none bg-transparent placeholder:text-gray-400"
-          />
-
-          {/* Search Button */}
-          <button
-            onClick={onSearchClick}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-navy-700 hover:bg-navy-800 text-white font-medium px-6 py-2 rounded-xl text-sm transition"
-          >
-            검색
-          </button>
         </div>
       </div>
 

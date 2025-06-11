@@ -9,7 +9,7 @@ function Logo() {
   return (
     <div className="flex items-center space-x-2">
       <TrendingUpDown className="h-6 w-6 text-navy-800" />
-      <span className="text-xl font-bold text-gray-900">Price Trend AI</span>
+      <span className="text-xl font-bold text-navy-800">Price Trend AI</span>
     </div>
   );
 }
@@ -24,13 +24,13 @@ export default function Layout({ children }: LayoutProps) {
             <nav className="flex space-x-8">
               <a
                 href="/"
-                className="text-gray-600 hover:text-navy-600 font-medium transition-colors"
+                className="text-gray-600 hover:text-navy-800 font-medium transition-colors"
               >
                 Home
               </a>
               <a
                 href="/history"
-                className="text-gray-600 hover:text-navy-600 font-medium transition-colors"
+                className="text-gray-600 hover:text-navy-800 font-medium transition-colors"
               >
                 History
               </a>
@@ -39,9 +39,9 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </header>
 
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow ">{children}</main>
 
-      <footer className="bg-white shadow-sm border-t py-6 text-gray-800">
+      <footer className="bg-white shadow-sm border-t py-6 text-navy-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div>

@@ -33,7 +33,7 @@ export default function PropertyModal({
     setIsPredicting(true);
     try {
       const res = await fetchPricePrediction(property.title, selectedArea, dealType);
-      
+
       const forecastData = res.forecast_json;
 
       const parsed = Object.entries(forecastData).map(([date, v]) => ({
@@ -47,7 +47,7 @@ export default function PropertyModal({
 
       const lastActualIndex = parsed.reduce(
         (acc, cur, idx) => (cur.actual !== null ? idx : acc),
-        -1
+        -1,
       );
 
       const final = parsed.map((d, idx) => ({
@@ -166,20 +166,29 @@ export default function PropertyModal({
                       </button>
                     ))}
                   </div>
-                  {/* 예측 버튼 */}
+
                   <button
                     onClick={handlePredict}
                     disabled={!selectedArea || isPredicting}
-                    className="mb-4 px-4 py-2 text-sm border border-blue-200 rounded-md text-blue-600 hover:bg-blue-50 disabled:opacity-50 flex items-center"
+                    className="mb-2 px-4 py-2 text-sm border border-blue-200 rounded-md text-blue-600 hover:bg-blue-50 disabled:opacity-50 flex items-center"
                   >
                     <RefreshCw className={`mr-2 h-4 w-4 ${isPredicting ? 'animate-spin' : ''}`} />
                     AI 예측 요청
                   </button>
 
-                  {/* 차트 렌더링 */}
-                  <div className="h-[400px]">
-                    <ForecastChart data={aiChartData} />
-                  </div>
+                  {isPredicting ? (
+                    <div className="text-center text-sm text-gray-500 h-[400px] flex items-center justify-center border border-gray-100 rounded-md mb-4">
+                      예측에는 최대 1분 정도 소요될 수 있습니다. 잠시만 기다려 주세요.
+                    </div>
+                  ) : !aiChartData || aiChartData.length === 0 ? (
+                    <div className="text-center text-sm text-gray-500 h-[400px] flex items-center justify-center border border-gray-100 rounded-md">
+                      예측 데이터가 없습니다.
+                    </div>
+                  ) : (
+                    <div className="h-[400px]">
+                      <ForecastChart data={aiChartData} />
+                    </div>
+                  )}
                 </>
               )}
             </div>
