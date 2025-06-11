@@ -178,7 +178,7 @@ export default function PropertyModal({
 
                   {isPredicting ? (
                     <div className="text-center text-sm text-gray-500 h-[400px] flex items-center justify-center border border-gray-100 rounded-md mb-4">
-                      예측에는 최대 1분 정도 소요될 수 있습니다. 잠시만 기다려 주세요.
+                      예측에는 1~2분 정도 소요될 수 있습니다. 잠시만 기다려 주세요.
                     </div>
                   ) : !aiChartData || aiChartData.length === 0 ? (
                     <div className="text-center text-sm text-gray-500 h-[400px] flex items-center justify-center border border-gray-100 rounded-md">

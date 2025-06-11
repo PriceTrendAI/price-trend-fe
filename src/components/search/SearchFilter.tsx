@@ -63,7 +63,7 @@ export default function SearchFilter() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-28">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-[6.5rem]">
       {/* Title */}
       <div className="text-center mb-12">
         <div className="mb-6">
@@ -72,8 +72,8 @@ export default function SearchFilter() {
             부동산 가격 예측 서비스
           </span>
         </div>
-        <h2 className="text-4xl font-bold mb-4 text-gray-900">부동산을 검색해보세요</h2>
-        <p className="text-gray-600">타겟부동산을 입력하여 부동산 정보를 예측해보세요</p>
+        <h2 className="text-4xl font-bold mb-4 text-gray-900">부동산을 검색해 보세요</h2>
+        <p className="text-gray-600">타겟 부동산을 입력하여 부동산 정보를 예측해 보세요</p>
       </div>
 
       <div className="relative max-w-2xl mx-auto mb-16">
