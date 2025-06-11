@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { Home, MapPin, Search } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { MapPin, Search } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { fetchSearchResults } from '../../api/search';
 import type { PropertyCardData } from '../../types/property';
@@ -12,125 +12,118 @@ export default function SearchFilter() {
   const [showResults, setShowResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [filteredProperties, setFilteredProperties] = useState<PropertyCardData[]>([]);
+  const [isFocused, setIsFocused] = useState(false);
+  const [hasQueried, setHasQueried] = useState(false);
 
   const navigate = useNavigate();
-
-  // 주소 쿼리스트링 (예: /search?keyword=삼송동일스위트2차)에서 keyword 추출
   const [searchParams] = useSearchParams();
   const keywordFromQuery = useMemo(() => searchParams.get('keyword') || '', [searchParams]);
 
-  // 실제 검색을 수행하는 함수
-  const handleSearch = async (keywordParam?: string) => {
-    const keyword = keywordParam || searchQuery.trim();
-    if (!keyword) return;
+  // 검색 요청 함수
+  const handleSearch = useCallback(
+    async (keywordParam?: string) => {
+      const keyword = keywordParam || searchQuery.trim();
+      if (!keyword) return;
 
-    try {
-      setIsLoading(true); // 로딩 중 표시
-      setShowResults(true); // 결과 보여주도록 설정
-      const response = await fetchSearchResults(keyword); // API 호출
-      setFilteredProperties(response); // 결과 저장
-    } catch (error) {
-      console.error('검색 실패:', error);
-      setFilteredProperties([]); // 에러 시 빈 배열
-    } finally {
-      setIsLoading(false); // 로딩 종료
-    }
-  };
+      try {
+        setIsLoading(true);
+        setShowResults(true);
+        const response = await fetchSearchResults(keyword);
+        setFilteredProperties(Array.isArray(response) ? response : []);
+      } catch (error) {
+        console.error('검색 실패:', error);
+        setFilteredProperties([]);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [searchQuery],
+  );
 
-  // 검색 버튼 클릭 시 실행되는 함수
-  const onSearchClick = () => {
+  // 검색 버튼 or Enter 눌렀을 때
+  const onSearchClick = useCallback(() => {
     const keyword = searchQuery.trim();
-    if (keyword) {
-      // 검색어를 URL 쿼리로 반영해서 이동 (라우팅 발생)
-      navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
-    }
-  };
+    if (!keyword) return;
+    navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
+    handleSearch(keyword);
+  }, [searchQuery, navigate, handleSearch]);
 
-  // 쿼리에서 keyword가 바뀔 때 자동 검색 실행
+  // URL 쿼리 기반 최초 검색 1회
   useEffect(() => {
-    setSearchQuery(keywordFromQuery); // 쿼리에서 가져온 keyword를 입력창에도 반영
-    if (keywordFromQuery) {
-      handleSearch(keywordFromQuery); // 자동 검색
+    if (!hasQueried && keywordFromQuery) {
+      setSearchQuery(keywordFromQuery);
+      handleSearch(keywordFromQuery);
+      setHasQueried(true);
     }
-  }, [keywordFromQuery]);
+  }, [keywordFromQuery, handleSearch, hasQueried]);
+
+  // 입력값 변경 핸들링 (검색결과는 그대로 둠)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
 
   return (
-    <div className="max-w-7xl mx-auto min-h-screen bg-gray-50">
-      {/* 상단 검색 바 영역 */}
-      <div className="bg-white border-b rounded-md">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex items-center gap-3 mb-6">
-            <Home className="h-8 w-8 text-navy-700" />
-            <h1 className="text-2xl font-bold text-navy-800">부동산 가격 예측 서비스</h1>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24">
+      {/* Title */}
+      <div className="text-center mb-12">
+        <div className="mb-6">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
+            <MapPin className="w-4 h-4 mr-1" />
+            부동산 가격 예측 서비스
+          </span>
+        </div>
+        <h2 className="text-4xl font-bold mb-4 text-gray-900">부동산을 검색해보세요</h2>
+        <p className="text-gray-600">타겟부동산을 입력하여 부동산 정보를 예측해보세요</p>
+      </div>
+
+      {/* Search Input */}
+      <div className="relative max-w-2xl mx-auto mb-16">
+        <div
+          className={`relative bg-white rounded-2xl shadow-lg border-2 transition-all duration-300 ${
+            isFocused
+              ? 'border-navy-500 shadow-xl ring-4 ring-navy-100'
+              : 'border-gray-200 hover:border-gray-300'
+          }`}
+        >
+          {/* Icon: Search */}
+          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-0">
+            <Search className="h-5 w-5 text-gray-400" />
           </div>
 
-          {/* 검색 입력 필드와 버튼 */}
-          <div className="flex gap-3 mb-4">
-            <div className="flex-1 relative">
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <input
-                placeholder="동이나 지역을 입력하세요 (예: 강남구, 역삼동)"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 py-2 border rounded-md"
-                onKeyDown={(e) => e.key === 'Enter' && onSearchClick()}
-              />
-            </div>
-            <button
-              onClick={onSearchClick}
-              className="px-6 py-2 bg-navy-700 text-white rounded-md flex items-center"
-            >
-              <Search className="h-4 w-4 mr-2" /> 검색
-            </button>
+          {/* Icon: Location */}
+          <div className="absolute left-12 top-1/2 transform -translate-y-1/2 z-0">
+            <MapPin className="h-4 w-4 text-navy-500" />
           </div>
+
+          {/* Input */}
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleInputChange}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            onKeyDown={(e) => e.key === 'Enter' && onSearchClick()}
+            placeholder="건물명을 입력하세요 (예: 월드메르디앙, 푸르지오)"
+            className="relative z-20 w-full pl-20 pr-32 py-5 text-lg border-0 rounded-2xl focus:ring-0 focus:outline-none bg-transparent placeholder:text-gray-400"
+          />
+
+          {/* Search Button */}
+          <button
+            onClick={onSearchClick}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-navy-700 hover:bg-navy-800 text-white font-medium px-6 py-2 rounded-xl text-sm transition"
+          >
+            검색
+          </button>
         </div>
       </div>
 
-      {/* 결과 표시 영역 */}
-      {/* <div className="max-w-7xl mx-auto px-4 py-8">
-        {showResults ? (
-          isLoading ? (
-            <div className="text-center py-20">
-              <LoaderCircle className="h-14 w-14 animate-spin text-gray-300 mx-auto mb-6" />
-              <h3 className="text-xl font-medium text-gray-500 mb-2">잠시만 기다려 주세요...</h3>
-            </div>
-          ) : (filteredProperties?.length ?? 0) === 0 ? (
-            // 결과 없음
-            <div className="text-center py-20">
-              <Home className="h-16 w-16 text-gray-300 mx-auto mb-6" />
-              <h3 className="text-xl font-medium text-gray-600 mb-2">검색 결과가 없습니다</h3>
-              <p className="text-gray-500">동이나 지역명을 입력하여 부동산 정보를 확인하세요</p>
-            </div>
-          ) : (
-            // 결과 있음
-            <>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-navy-800">
-                  검색 결과 ({filteredProperties.length}개)
-                </h2>
-                <div className="text-sm text-gray-500">'{searchQuery}' 검색 결과</div>
-              </div>
-              <PropertyGrid properties={filteredProperties} />
-            </>
-          )
-        ) : (
-          // 초기 상태
-          <div className="text-center py-20">
-            <Home className="h-16 w-16 text-gray-300 mx-auto mb-6" />
-            <h3 className="text-xl font-medium text-gray-600 mb-2">부동산을 검색해보세요</h3>
-            <p className="text-gray-500">동이나 지역명을 입력하여 부동산 정보를 확인하세요</p>
-          </div>
-        )}
-      </div> */}
-
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <SearchResult
-          isLoading={isLoading}
-          filteredProperties={filteredProperties}
-          searchQuery={searchQuery}
-          showResults={showResults}
-        />
-      </div>
+      {/* Results */}
+      <SearchResult
+        isLoading={isLoading}
+        filteredProperties={filteredProperties}
+        searchQuery={searchQuery}
+        showResults={showResults}
+      />
     </div>
   );
 }
