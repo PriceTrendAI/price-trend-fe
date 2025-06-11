@@ -21,7 +21,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1280px] px-4 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Logo />
             <nav className="flex space-x-8">

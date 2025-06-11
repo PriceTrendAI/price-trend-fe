@@ -22,7 +22,6 @@ export default function HistoryCard({ property, onClick, onDelete }: HistoryCard
     onDelete(id);
   };
 
-  console.log('dddddddddddddddddddddddddddddd', property.id);
   return (
     <div
       className="relative border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer bg-white"

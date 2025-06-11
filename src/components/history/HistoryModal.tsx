@@ -131,6 +131,14 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
                     <span className="font-medium text-gray-600 inline-block w-20">면적</span>
                     <span>{property.area_detail?.area || property.complex_info?.면적 || '-'}</span>
                   </li>
+                  <li>
+                    <span className="font-medium text-gray-600 inline-block w-20">조회일</span>
+                    <span>
+                      {property.created_at?.slice(0, 16).replace('T', ' ') ||
+                        property.updated_at?.slice(0, 16).replace('T', ' ') ||
+                        '-'}
+                    </span>
+                  </li>
                 </ul>
               </div>
 
