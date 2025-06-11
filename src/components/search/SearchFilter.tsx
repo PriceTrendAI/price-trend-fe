@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Home, LoaderCircle, MapPin, Search } from 'lucide-react';
+import { Home, MapPin, Search } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { fetchSearchResults } from '../../api/search';
-import PropertyGrid from '../card/PropertyGrid';
+// import PropertyGrid from '../card/PropertyGrid';
 import type { PropertyCardData } from '../../types/property';
+import SearchResult from './SearchResult';
 
 export default function SearchFilter() {
   // 검색어 입력 상태
@@ -94,14 +95,14 @@ export default function SearchFilter() {
       </div>
 
       {/* 결과 표시 영역 */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* <div className="max-w-7xl mx-auto px-4 py-8">
         {showResults ? (
           isLoading ? (
             <div className="text-center py-20">
               <LoaderCircle className="h-14 w-14 animate-spin text-gray-300 mx-auto mb-6" />
               <h3 className="text-xl font-medium text-gray-500 mb-2">잠시만 기다려 주세요...</h3>
             </div>
-          ) : filteredProperties.length === 0 ? (
+          ) : (filteredProperties?.length ?? 0) === 0 ? (
             // 결과 없음
             <div className="text-center py-20">
               <Home className="h-16 w-16 text-gray-300 mx-auto mb-6" />
@@ -128,6 +129,15 @@ export default function SearchFilter() {
             <p className="text-gray-500">동이나 지역명을 입력하여 부동산 정보를 확인하세요</p>
           </div>
         )}
+      </div> */}
+
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <SearchResult
+          isLoading={isLoading}
+          filteredProperties={filteredProperties}
+          searchQuery={searchQuery}
+          showResults={showResults}
+        />
       </div>
     </div>
   );
