@@ -4,21 +4,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { Home, MapPin, Search } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { fetchSearchResults } from '../../api/search';
-// import PropertyGrid from '../card/PropertyGrid';
 import type { PropertyCardData } from '../../types/property';
 import SearchResult from './SearchResult';
 
 export default function SearchFilter() {
-  // 검색어 입력 상태
   const [searchQuery, setSearchQuery] = useState('');
-
-  // 검색 결과 보여줄지 여부
   const [showResults, setShowResults] = useState(false);
-
-  // 로딩 상태
   const [isLoading, setIsLoading] = useState(false);
-
-  // 검색 결과 리스트 상태
   const [filteredProperties, setFilteredProperties] = useState<PropertyCardData[]>([]);
 
   const navigate = useNavigate();

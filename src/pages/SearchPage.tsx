@@ -1,10 +1,10 @@
 import Layout from '../components/layout/Layout';
-import SearchForm from '../components/search/SearchForm';
+import SearchFilter from '../components/search/SearchFilter';
 
 export default function SearchPage() {
   return (
     <Layout>
-      <SearchForm />
+      <SearchFilter />
     </Layout>
   );
 }
