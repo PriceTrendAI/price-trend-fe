@@ -23,6 +23,24 @@ export default function ForecastChart({ data }: ForecastChartProps) {
     ];
   }, [data]);
 
+  const labelMap: Record<string, string> = {
+    upper: '상한가',
+    lower: '하한가',
+    band: '예측 범위',
+    predictedBefore: '예측 (기존)',
+    predictedAfter: '예측 (미래)',
+    actual: '실제 거래가',
+  };
+
+  const labelColor: Record<string, string> = {
+    upper: 'text-gray-600',
+    lower: 'text-gray-600',
+    predictedBefore: 'text-blue-600',
+    predictedAfter: 'text-red-600',
+    band: 'text-blue-400',
+    actual: 'text-navy-800',
+  };
+
   // 애니메이션과 predictedAfter 표시 트리거
   useEffect(() => {
     if (data.length > 0) {
@@ -65,11 +83,31 @@ export default function ForecastChart({ data }: ForecastChartProps) {
           tick={{ fontSize: 12 }}
         />
         <Tooltip
-          formatter={(v: number) => `${(v / 1e8).toFixed(2)} 억 원`}
-          labelFormatter={(d) => `📅 ${d}`}
-          labelStyle={{ color: '#333', fontSize: 12 }}
-          itemStyle={{ color: '#333', fontSize: 12 }}
-          animationDuration={0}
+          content={({ label, payload }) => {
+            if (!payload || payload.length === 0) return null;
+
+            return (
+              <div className="bg-white shadow-md rounded-md p-3 border text-sm text-gray-700 min-w-[180px]">
+                <div className="mb-2 font-semibold text-navy-800 flex items-center gap-1">
+                  <span>📅{label}</span>
+                </div>
+                {payload.map((entry, index) => {
+                  const { dataKey, value } = entry;
+                  const name = labelMap[dataKey as string] ?? dataKey;
+                  const color = labelColor[dataKey as string] ?? 'text-gray-700';
+
+                  return (
+                    <div key={index} className="flex justify-between items-center">
+                      <span className={`truncate ${color}`}>{name}</span>
+                      <span>
+                        {value != null ? `${((value as number) / 1e8).toFixed(2)} 억 원` : '-'}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          }}
         />
         {/* 불필요한 시각 요소들 숨김 처리 */}
         <Line
