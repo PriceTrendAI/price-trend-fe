@@ -1,6 +1,7 @@
 import { LoaderCircle, Home, Search, Building, ChartNoAxesCombined } from 'lucide-react';
 import PropertyGrid from '../property/PropertyGrid';
 import type { PropertyCardData } from '../../types/property';
+import { useMemo } from 'react';
 
 interface Props {
   isLoading: boolean;
@@ -15,6 +16,12 @@ export default function SearchResult({
   searchQuery,
   showResults,
 }: Props) {
+  const renderableProperties = useMemo(() => {
+    return filteredProperties.filter(
+      (p) => p.address?.trim() || p.type?.trim() || p.area?.trim() || p.households?.trim(),
+    );
+  }, [filteredProperties]);
+
   if (!showResults) {
     return (
       <>
@@ -80,11 +87,11 @@ export default function SearchResult({
     <>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-navy-800">
-          검색 결과 ({filteredProperties.length}개)
+          검색 결과 ({renderableProperties.length}개)
         </h2>
         <div className="text-sm text-gray-500">'{searchQuery}' 검색 결과</div>
       </div>
-      <PropertyGrid properties={filteredProperties} />
+      <PropertyGrid properties={renderableProperties} />
     </>
   );
 }

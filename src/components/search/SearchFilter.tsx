@@ -14,6 +14,7 @@ export default function SearchFilter() {
   const [filteredProperties, setFilteredProperties] = useState<PropertyCardData[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const [hasQueried, setHasQueried] = useState(false);
+  const [confirmedQuery, setConfirmedQuery] = useState('');
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -44,6 +45,7 @@ export default function SearchFilter() {
   const onSearchClick = useCallback(() => {
     const keyword = searchQuery.trim();
     if (!keyword) return;
+    setConfirmedQuery(keyword);
     navigate(`/search?keyword=${encodeURIComponent(keyword)}`);
     handleSearch(keyword);
   }, [searchQuery, navigate, handleSearch]);
@@ -52,6 +54,7 @@ export default function SearchFilter() {
   useEffect(() => {
     if (!hasQueried && keywordFromQuery) {
       setSearchQuery(keywordFromQuery);
+      setConfirmedQuery(keywordFromQuery);
       handleSearch(keywordFromQuery);
       setHasQueried(true);
     }
@@ -117,7 +120,7 @@ export default function SearchFilter() {
       <SearchResult
         isLoading={isLoading}
         filteredProperties={filteredProperties}
-        searchQuery={searchQuery}
+        searchQuery={confirmedQuery}
         showResults={showResults}
       />
     </div>
