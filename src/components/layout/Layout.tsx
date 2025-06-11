@@ -1,4 +1,5 @@
 import { TrendingUpDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import type { ReactNode } from 'react';
 
 interface LayoutProps {
@@ -7,10 +8,12 @@ interface LayoutProps {
 
 function Logo() {
   return (
-    <div className="flex items-center space-x-2">
-      <TrendingUpDown className="h-6 w-6 text-navy-800" />
-      <span className="text-xl font-bold text-navy-800">Price Trend AI</span>
-    </div>
+    <Link to="/" className="flex items-center space-x-2 cursor-pointer group transition-all">
+      <TrendingUpDown className="h-6 w-6 text-navy-800 group-hover:text-blue-600 transition-colors" />
+      <span className="text-xl font-bold text-navy-800 group-hover:text-blue-600 transition-colors">
+        Price Trend AI
+      </span>
+    </Link>
   );
 }
 
@@ -22,18 +25,12 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex justify-between items-center h-16">
             <Logo />
             <nav className="flex space-x-8">
-              <a
-                href="/"
-                className="text-gray-600 hover:text-navy-800 font-medium transition-colors"
-              >
-                Home
-              </a>
-              <a
-                href="/history"
-                className="text-gray-600 hover:text-navy-800 font-medium transition-colors"
+              <Link
+                to="/history"
+                className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
               >
                 History
-              </a>
+              </Link>
             </nav>
           </div>
         </div>

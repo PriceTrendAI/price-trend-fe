@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import PropertyModal from '../modal/PropertyModal';
+import PropertyModal from './PropertyModal';
 import PropertyCard from './PropertyCard';
 import type { PropertyCardData } from '../../types/property';
 import { fetchPropertyDetails } from '../../api/search';

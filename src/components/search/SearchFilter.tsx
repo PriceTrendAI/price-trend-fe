@@ -66,7 +66,7 @@ export default function SearchFilter() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-[6.5rem]">
       {/* Title */}
       <div className="text-center mb-12">
-        <div className="mb-6">
+        <div className="py-6">
           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
             <MapPin className="w-4 h-4 mr-1" />
             부동산 가격 예측 서비스
@@ -98,7 +98,7 @@ export default function SearchFilter() {
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               onKeyDown={(e) => e.key === 'Enter' && onSearchClick()}
-              placeholder="건물명을 입력하세요 (예: 월드메르디앙, 푸르지오)"
+              placeholder="검색할 지역 또는 건물명을 입력해 주세요 (예: 역삼동, 래미안 블레스티지)"
               className="flex-1 px-4 py-5 text-lg border-0 rounded-2xl focus:ring-0 focus:outline-none bg-transparent placeholder:text-gray-400"
             />
 

@@ -1,5 +1,5 @@
 import { LoaderCircle, Home, Search, Building, ChartNoAxesCombined } from 'lucide-react';
-import PropertyGrid from '../card/PropertyGrid';
+import PropertyGrid from '../property/PropertyGrid';
 import type { PropertyCardData } from '../../types/property';
 
 interface Props {

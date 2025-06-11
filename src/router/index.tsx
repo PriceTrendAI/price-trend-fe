@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from '../App';
-import SearchPage from '../pages/SearchPage';
-import HistoryPage from '../pages/HistoryPage';
+import SearchPage from '../pages/searchPage';
+import HistoryPage from '../pages/historyPage';
 
 export default function AppRouter() {
   return (
