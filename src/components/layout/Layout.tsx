@@ -1,6 +1,7 @@
 import { TrendingUpDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { ReactNode } from 'react';
+import ThemeToggle from '../ui/ThemeToggle';
 
 interface LayoutProps {
   children: ReactNode;
@@ -24,14 +25,17 @@ export default function Layout({ children }: LayoutProps) {
         <div className="max-w-[1280px] px-4 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Logo />
-            <nav className="flex space-x-8">
-              <Link
-                to="/history"
-                className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
-              >
-                History
-              </Link>
-            </nav>
+            <div className="flex items-center space-x-6">
+              <nav className="flex space-x-8">
+                <Link
+                  to="/history"
+                  className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+                >
+                  History
+                </Link>
+              </nav>
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </header>
