@@ -51,7 +51,7 @@ export default function HistoryGrid() {
       toast.success('삭제되었습니다.');
       loadHistory();
     } catch {
-      toast.error('삭제 중 오류가 발생했습니다.');
+      toast.error('오류가 발생했습니다.');
     }
   };
 
