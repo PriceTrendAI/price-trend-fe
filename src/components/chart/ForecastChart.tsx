@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Area, Scatter } from 'recharts';
 import type { ForecastPoint } from '../../types/property';
 import ChartLegendItem from '../ui/ChartLegendItem';
+import { useThemeStore } from '../../store/themeStore';
 
 interface ForecastChartProps {
   data: ForecastPoint[];
 }
 
 export default function ForecastChart({ data }: ForecastChartProps) {
+  const isDark = useThemeStore((s) => s.isDark);
   const [enableAnimation, setEnableAnimation] = useState(false);
   const [showAfterLine, setShowAfterLine] = useState(false);
 
@@ -33,12 +35,12 @@ export default function ForecastChart({ data }: ForecastChartProps) {
   };
 
   const labelColor: Record<string, string> = {
-    upper: 'text-gray-600',
-    lower: 'text-gray-600',
-    predictedBefore: 'text-blue-600',
-    predictedAfter: 'text-red-600',
-    band: 'text-blue-400',
-    actual: 'text-navy-800',
+    upper: isDark ? 'text-dark-subtext' : 'text-gray-600',
+    lower: isDark ? 'text-dark-subtext' : 'text-gray-600',
+    predictedBefore: isDark ? 'text-blue-400' : 'text-blue-600',
+    predictedAfter: isDark ? 'text-red-400' : 'text-red-600',
+    band: isDark ? 'text-[rgba(79,125,249,0.5)]' : 'text-blue-400',
+    actual: isDark ? 'text-dark-text' : 'text-navy-800',
   };
 
   // 애니메이션과 predictedAfter 표시 트리거
@@ -65,7 +67,13 @@ export default function ForecastChart({ data }: ForecastChartProps) {
 
   return (
     <div
-      style={{ width: 800, margin: '0 auto', height: 400, backgroundColor: 'white', padding: 16 }}
+      style={{
+        width: 800,
+        margin: '0 auto',
+        height: 400,
+        backgroundColor: isDark ? '#262C31' : 'white',
+        padding: 16,
+      }}
     >
       <ComposedChart
         width={768}
@@ -73,22 +81,28 @@ export default function ForecastChart({ data }: ForecastChartProps) {
         data={data}
         margin={{ top: 16, right: 16, bottom: 16, left: 0 }}
       >
-        <CartesianGrid stroke="#eee" strokeDasharray="3 3" />
-        <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+        <CartesianGrid stroke={isDark ? '#8B949E' : '#eee'} strokeDasharray="3 3" />
+        <XAxis dataKey="date" tick={{ fontSize: 10, fill: isDark ? '#E6EDF3' : '#333' }} />
         <YAxis
           type="number"
           tickFormatter={(v) => `${(v / 1e8).toFixed(1)}억`}
           domain={[yMin, yMax]}
           allowDataOverflow
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: 10, fill: isDark ? '#E6EDF3' : '#333' }}
         />
         <Tooltip
           content={({ label, payload }) => {
             if (!payload || payload.length === 0) return null;
 
             return (
-              <div className="bg-white shadow-md rounded-md p-3 border text-sm text-gray-700 min-w-[180px]">
-                <div className="mb-2 font-semibold text-navy-800 flex items-center gap-1">
+              <div
+                className="bg-white shadow-md rounded-md p-3 border text-sm text-gray-700 min-w-[180px]
+              dark:bg-dark-surface dark:shadow-md dark:border-dark-border"
+              >
+                <div
+                  className="mb-2 font-semibold text-navy-800 flex items-center gap-1
+                dark:text-dark-text"
+                >
                   <span>📅{label}</span>
                 </div>
                 {payload.map((entry, index) => {
@@ -99,7 +113,7 @@ export default function ForecastChart({ data }: ForecastChartProps) {
                   return (
                     <div key={index} className="flex justify-between items-center">
                       <span className={`truncate ${color}`}>{name}</span>
-                      <span>
+                      <span className="text-gray-900 dark:text-dark-text">
                         {value != null ? `${((value as number) / 1e8).toFixed(2)} 억 원` : '-'}
                       </span>
                     </div>
@@ -130,7 +144,7 @@ export default function ForecastChart({ data }: ForecastChartProps) {
           dataKey="band"
           stackId="band"
           stroke="none"
-          fill="#4f7df9"
+          fill="#4F7DF9"
           fillOpacity={0.15}
           isAnimationActive={enableAnimation}
           animationDuration={1200}
@@ -140,7 +154,7 @@ export default function ForecastChart({ data }: ForecastChartProps) {
         {/* 예측 (기존) 선 */}
         <Line
           dataKey="predictedBefore"
-          stroke="#4f7df9"
+          stroke={isDark ? '#6ea8ff' : '#4f7df9'}
           strokeWidth={2}
           dot={false}
           name="예측 (기존)"
@@ -168,7 +182,7 @@ export default function ForecastChart({ data }: ForecastChartProps) {
         {/* 실제 거래가 점 */}
         <Scatter
           dataKey="actual"
-          fill="#1B2A4E"
+          fill={isDark ? '#E6EDF3' : '#1B2A4E'}
           name="실제 거래가"
           shape={({ cx, cy, fill }: any) => <circle cx={cx} cy={cy} r={1.6} fill={fill} />}
           isAnimationActive={false}
@@ -177,10 +191,11 @@ export default function ForecastChart({ data }: ForecastChartProps) {
 
       {/* 범례 */}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 12 }}>
-        <ChartLegendItem color="#4f7df9" label="예측 (기존)" />
-        <ChartLegendItem color="#f94f4f" label="예측 (미래)" dashed />
-        <ChartLegendItem color="#1B2A4E" label="실제 거래가" dashed />
-        <ChartLegendItem color="rgba(79, 125, 249, 0.15)" label="예측 범위" />
+        <ChartLegendItem color={isDark ? '#6ea8ff' : '#4f7df9'} label="예측 (기존)" />
+        <ChartLegendItem color={isDark ? '#f87171' : '#f94f4f'} label="예측 (미래)" dashed />
+
+        <ChartLegendItem color={isDark ? '#E6EDF3' : '#1B2A4E'} label="실제 거래가" dashed />
+        <ChartLegendItem color="rgba(79, 125, 249, 0.5)" label="예측 범위" />
       </div>
     </div>
   );

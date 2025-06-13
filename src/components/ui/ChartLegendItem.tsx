@@ -1,3 +1,5 @@
+import { useThemeStore } from '../../store/themeStore';
+
 interface ChartLegendItemProps {
   color: string;
   label: string;
@@ -5,6 +7,8 @@ interface ChartLegendItemProps {
 }
 
 export default function ChartLegendItem({ color, label, dashed = false }: ChartLegendItemProps) {
+  const isDark = useThemeStore((state) => state.isDark);
+
   return (
     <div style={{ display: 'flex', alignItems: 'center', marginRight: 16 }}>
       <div
@@ -22,7 +26,14 @@ export default function ChartLegendItem({ color, label, dashed = false }: ChartL
             : {}),
         }}
       />
-      <span style={{ fontSize: 12, color: '#333' }}>{label}</span>
+      <span
+        style={{
+          fontSize: 12,
+          color: isDark ? '#E6EDF3' : '#333',
+        }}
+      >
+        {label}
+      </span>
     </div>
   );
 }
