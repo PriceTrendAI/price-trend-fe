@@ -10,8 +10,21 @@ interface LayoutProps {
 function Logo() {
   return (
     <Link to="/" className="flex items-center space-x-2 cursor-pointer group transition-all">
-      <TrendingUpDown className="h-6 w-6 text-navy-800 group-hover:text-blue-600 transition-colors" />
-      <span className="text-xl font-bold text-navy-800 group-hover:text-blue-600 transition-colors">
+      <TrendingUpDown
+        className="
+        h-6 w-6 
+      text-navy-800 dark:text-dark-text 
+        transition-none 
+        group-hover:transition-colors group-hover:text-blue-600 
+        dark:group-hover:text-dark-accent"
+      />
+      <span
+        className="text-xl font-bold 
+      text-navy-800 dark:text-dark-text 
+        transition-none 
+        group-hover:transition-colors group-hover:text-blue-600 
+      dark:group-hover:text-dark-accent"
+      >
         Price Trend AI
       </span>
     </Link>
@@ -21,7 +34,7 @@ function Logo() {
 export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b dark:bg-dark-background dark:border-dark-border">
         <div className="max-w-[1280px] px-4 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Logo />
@@ -29,10 +42,12 @@ export default function Layout({ children }: LayoutProps) {
               <nav className="flex space-x-8">
                 <Link
                   to="/history"
-                  className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
-                >
-                  History
-                </Link>
+                  className="text-gray-600 dark:text-dark-text 
+                  font-medium 
+                  transition-none 
+                  hover:transition-colors hover:text-blue-600 
+                dark:hover:text-dark-accent"
+                />
               </nav>
               <ThemeToggle />
             </div>
@@ -42,12 +57,15 @@ export default function Layout({ children }: LayoutProps) {
 
       <main className="flex-grow ">{children}</main>
 
-      <footer className="bg-white shadow-sm border-t py-6 text-navy-800">
+      <footer
+        className="bg-white shadow-sm border-t py-6 text-navy-800 dark:bg-dark-background
+      dark:border-dark-border dark:text-dark-text"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <Logo />
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-sm text-gray-500 mt-2 dark:text-dark-subtext">
                 AI 기반 부동산 가격 예측 서비스로 <br />
                 스마트한 부동산 투자를 도와드립니다.
               </p>
@@ -79,7 +97,7 @@ export default function Layout({ children }: LayoutProps) {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-200 mt-8 pt-6 text-center text-sm text-gray-500">
+          <div className="border-t border-gray-200 mt-8 pt-6 text-center text-sm text-gray-500 dark:text-dark-subtext dark:border-dark-border">
             <p>&copy; 2025 Price Trend AI. All rights reserved.</p>
           </div>
         </div>
