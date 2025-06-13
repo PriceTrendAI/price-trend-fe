@@ -42,7 +42,7 @@ export default function Layout({ children }: LayoutProps) {
               <nav className="flex space-x-8">
                 <Link
                   to="/history"
-                  className="text-gray-600 dark:text-dark-text 
+                  className="text-navy-800 dark:text-dark-text 
                   font-medium 
                   transition-none 
                   hover:transition-colors hover:text-blue-600 

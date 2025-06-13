@@ -147,7 +147,7 @@ export default function PropertyModal({
                     {['매매', '전세', '월세'].map((type) => (
                       <label
                         key={type}
-                        className={`flex items-center gap-2 text-sm px-3 py-1 rounded-full cursor-pointer transition-colors
+                        className={`flex items-center gap-2 text-sm px-3 py-1 rounded-full cursor-pointer hover:transition-colors hover:duration-200
                           ${
                             dealType === type
                               ? 'bg-blue-100 text-blue-600 dark:bg-[#4F7DF9]/20 dark:text-blue-400'
@@ -172,7 +172,7 @@ export default function PropertyModal({
                       <button
                         key={area.trim()}
                         onClick={() => setSelectedArea(area.trim())}
-                        className={`flex items-center gap-2 text-sm px-3 py-1 rounded-full cursor-pointer transition-colors
+                        className={`flex items-center gap-2 text-sm px-3 py-1 rounded-full cursor-pointer backdrop:hover:transition-colors hover:duration-200
                         ${
                           selectedArea === area.trim()
                             ? 'bg-blue-100 text-blue-600 dark:bg-[#4F7DF9]/20 dark:text-blue-400'
@@ -187,7 +187,7 @@ export default function PropertyModal({
                   <button
                     onClick={handlePredict}
                     disabled={!selectedArea || isPredicting}
-                    className={`mb-2 px-4 py-2 text-sm rounded-full flex items-center gap-2 border transition-colors
+                    className={`mb-2 px-4 py-2 text-sm rounded-full flex items-center gap-2 border hover:transition-colors hover:duration-200
                       ${
                         !selectedArea || isPredicting
                           ? 'opacity-50 cursor-not-allowed border-gray-200 text-gray-400 dark:border-dark-border dark:text-dark-subtext'
