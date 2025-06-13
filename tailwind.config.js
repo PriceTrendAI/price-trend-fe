@@ -22,12 +22,12 @@ export default {
           900: '#001A33',
         },
         dark: {
-          background: '#1F2428', // 전체 배경
-          surface: '#262C31', // 카드, 모달 등 서피스 배경
-          border: '#343A40', // 테두리
-          text: '#E6EDF3', // 기본 텍스트
-          subtext: '#8B949E', // 서브 텍스트
-          accent: '#4F7DF9', // 버튼, 링크 등 강조 색
+          background: '#1F2428',
+          surface: '#262C31',
+          border: '#343A40',
+          text: '#E6EDF3',
+          subtext: '#8B949E',
+          accent: '#4F7DF9',
           icon: '#2C3440',
           btn: '#1A1F26',
           chip: '#2A2F35',

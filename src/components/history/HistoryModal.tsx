@@ -54,7 +54,7 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4">
       <div className="bg-white w-full max-w-4xl rounded-xl shadow-lg overflow-y-auto max-h-[90vh] dark:bg-dark-surface dark:shadow-xl">
         <div className="border-b p-6 flex justify-between items-center dark:border-dark-border">
-          <h2 className="text-xl font-semibold truncate dark:text-dark-text">{title}</h2>
+          <h2 className="text-xl font-semibold dark:text-dark-text">{title}</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 text-sm dark:text-dark-subtext dark:hover:text-dark-text"
@@ -148,7 +148,7 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
             </ul>
 
             {aiChartData.length === 0 ? (
-              <div className="text-center text-gray-500 text-sm h-[400px] flex items-center justify-center border rounded">
+              <div className="text-center text-gray-500 text-sm h-[400px] flex items-center justify-center border rounded dark:border-dark-border">
                 예측 데이터가 존재하지 않습니다.
               </div>
             ) : (
