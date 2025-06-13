@@ -58,9 +58,10 @@ export default function HistoryGrid() {
   return (
     <>
       <div className="max-w-[1280px] mx-auto px-4 py-4 flex justify-between items-center">
-        <div className="text-gray-600 text-sm">총 {history.length}건</div>
+        <div className="text-gray-600 text-sm dark:text-dark-text">총 {history.length}건</div>
         <select
-          className="text-sm border px-2 py-1 rounded bg-white text-gray-700 focus:outline-none focus:ring-1 focus:ring-navy-100"
+          className="text-sm border px-2 py-1 rounded bg-white text-gray-700 focus:outline-none focus:ring-1 focus:ring-navy-100
+          dark:bg-dark-surface dark:text-dark-text dark:border-dark-border dark:focus:ring-dark-icon"
           value={sortType}
           onChange={(e) => setSortType(e.target.value as 'recent' | 'recent-desc' | 'name')}
         >
@@ -72,7 +73,7 @@ export default function HistoryGrid() {
 
       {history.length === 0 ? (
         <div className="text-center py-20">
-          <p className="text-gray-500">조회된 기록이 없습니다.</p>
+          <p className="text-gray-500 dark:text-dark-text">조회된 기록이 없습니다.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-[1280px] mx-auto px-4 pb-12">

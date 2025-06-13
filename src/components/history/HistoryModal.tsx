@@ -52,23 +52,26 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4">
-      <div className="bg-white w-full max-w-4xl rounded-xl shadow-lg overflow-y-auto max-h-[90vh]">
-        <div className="border-b p-6 flex justify-between items-center">
-          <h2 className="text-xl font-semibold truncate">{title}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-sm">
+      <div className="bg-white w-full max-w-4xl rounded-xl shadow-lg overflow-y-auto max-h-[90vh] dark:bg-dark-surface dark:shadow-xl">
+        <div className="border-b p-6 flex justify-between items-center dark:border-dark-border">
+          <h2 className="text-xl font-semibold truncate dark:text-dark-text">{title}</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 text-sm dark:text-dark-subtext dark:hover:text-dark-text"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="border-b px-6 pt-4">
+        <div className="border-b px-6 pt-4 dark:border-dark-border">
           <div className="grid grid-cols-2 w-full">
             {['info', 'price'].map((key) => (
               <button
                 key={key}
                 className={`py-2 text-sm font-medium border-b-2 ${
                   tab === key
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    ? 'border-blue-600 text-blue-600 dark:border-dark-text dark:text-dark-text'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-dark-subtext dark:hover:text-dark-text'
                 }`}
                 onClick={() => setTab(key as 'info' | 'price')}
               >
@@ -100,8 +103,10 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
               </div>
               {complex.관리사무소 && (
                 <div>
-                  <h4 className="font-medium text-gray-500 mb-2">설명</h4>
-                  <p className="text-sm text-gray-700">관리사무소 : {complex.관리사무소}</p>
+                  <h4 className="font-medium text-gray-500 mb-2 dark:text-dark-text">설명</h4>
+                  <p className="text-sm text-gray-700 dark:text-dark-subtext">
+                    관리사무소 : {complex.관리사무소}
+                  </p>
                 </div>
               )}
             </div>
@@ -110,22 +115,30 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
           {/* 가격 분석 탭 */}
           <div className={tab === 'price' ? 'block' : 'hidden'}>
             <div className="mb-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-1">가격 예측 분석</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="text-xl font-semibold text-gray-800 mb-1 dark:text-dark-text">
+                가격 예측 분석
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-dark-subtext">
                 DB에 저장된 예측 결과입니다. 실제 시세와 예측값을 확인하세요.
               </p>
             </div>
-            <ul className="space-y-1 text-sm text-gray-700 mb-2 list-none">
+            <ul className="space-y-1 text-sm text-gray-700 mb-2 list-none dark:text-dark-subtext">
               <li>
-                <span className="font-medium text-gray-600 inline-block w-20">거래유형</span>
+                <span className="font-medium text-gray-600 inline-block w-20 dark:text-dark-text">
+                  거래유형
+                </span>
                 <span>{property.deal_type ?? '-'}</span>
               </li>
               <li>
-                <span className="font-medium text-gray-600 inline-block w-20">면적</span>
+                <span className="font-medium text-gray-600 inline-block w-20 dark:text-dark-text">
+                  면적
+                </span>
                 <span>{property.area_detail?.area || property.complex_info?.면적 || '-'}</span>
               </li>
               <li>
-                <span className="font-medium text-gray-600 inline-block w-20">조회일</span>
+                <span className="font-medium text-gray-600 inline-block w-20 dark:text-dark-text">
+                  조회일
+                </span>
                 <span>
                   {property.created_at?.slice(0, 16).replace('T', ' ') ||
                     property.updated_at?.slice(0, 16).replace('T', ' ') ||
@@ -153,8 +166,8 @@ export default function HistoryModal({ isOpen, onClose, property }: HistoryModal
 function Info({ label, value }: { label: string; value?: string }) {
   return (
     <div>
-      <h4 className="text-sm font-medium text-gray-500">{label}</h4>
-      <p className="text-sm text-gray-800">{value ?? '-'}</p>
+      <h4 className="text-sm font-medium text-gray-500 dark:text-dark-text">{label}</h4>
+      <p className="text-sm text-gray-800 dark:text-dark-subtext">{value ?? '-'}</p>
     </div>
   );
 }
