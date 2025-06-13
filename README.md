@@ -19,7 +19,7 @@ $ npm install
 **Setup Environment Variables**
 
 ```
-$ cp .sample.env .env
+VITE_API_BASE_URL=http://<BACKEND_HOST>:<PORT>
 ```
 
 **Run Development Server**
