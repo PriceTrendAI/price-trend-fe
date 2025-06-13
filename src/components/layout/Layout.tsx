@@ -47,7 +47,9 @@ export default function Layout({ children }: LayoutProps) {
                   transition-none 
                   hover:transition-colors hover:text-blue-600 
                 dark:hover:text-dark-accent"
-                />
+                >
+                  History
+                </Link>
               </nav>
               <ThemeToggle />
             </div>

@@ -24,6 +24,7 @@ export default {
           text: '#E6EDF3', // 기본 텍스트
           subtext: '#8B949E', // 서브 텍스트
           accent: '#4F7DF9', // 버튼, 링크 등 강조 색
+          icon: '#2C3440',
         },
       },
     },
