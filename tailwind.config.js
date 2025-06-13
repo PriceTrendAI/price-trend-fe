@@ -12,6 +12,10 @@ export default {
       colors: {
         navy: {
           100: '#E0E9FF',
+          200: '#C3D6F5',
+          300: '#94B6E5',
+          400: '#5D90C8',
+          500: '#2C5FA5',
           600: '#004D99',
           700: '#1e3a8a',
           800: '#172554',
@@ -25,6 +29,9 @@ export default {
           subtext: '#8B949E', // 서브 텍스트
           accent: '#4F7DF9', // 버튼, 링크 등 강조 색
           icon: '#2C3440',
+          btn: '#1A1F26',
+          chip: '#2A2F35',
+          chipHover: '#3A3F45',
         },
       },
     },

@@ -25,7 +25,7 @@ export default function SearchResult({
   if (!showResults) {
     return (
       <>
-        <div className="grid md:grid-cols-3 gap-8 py-10">
+        <div className="grid md:grid-cols-3 gap-8 py-20">
           <div
             className="text-center p-6 
             bg-white dark:bg-dark-surface 
@@ -95,7 +95,7 @@ export default function SearchResult({
 
   if (isLoading) {
     return (
-      <div className="text-center py-20">
+      <div className="text-center py-24">
         <LoaderCircle className="h-14 w-14 animate-spin text-gray-300 mx-auto mb-6 dark:text-dark-text" />
         <h3 className="text-xl font-medium text-gray-600 mb-2 dark:text-dark-subtext">
           정보를 불러오고 있습니다
@@ -107,7 +107,7 @@ export default function SearchResult({
 
   if ((filteredProperties?.length ?? 0) === 0) {
     return (
-      <div className="text-center py-20">
+      <div className="text-center py-24">
         <Home className="h-16 w-16 text-gray-300 mx-auto mb-6 dark:text-dark-text" />
         <h3 className="text-xl font-medium text-gray-600 mb-2 dark:text-dark-subtext">
           검색 결과가 없습니다
