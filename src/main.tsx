@@ -9,6 +9,6 @@ createRoot(document.getElementById('root')!).render(
     <Toaster position="top-center" />
     {/* <StrictMode> */}
     <AppRouter />
-    {/* </StrictMode> */},
+    {/* </StrictMode> */}
   </>,
 );

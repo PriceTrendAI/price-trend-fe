@@ -1,7 +1,6 @@
 import { TrendingUpDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { ReactNode } from 'react';
-import ThemeToggle from '../ui/ThemeToggle';
 
 interface LayoutProps {
   children: ReactNode;
@@ -51,7 +50,6 @@ export default function Layout({ children }: LayoutProps) {
                   History
                 </Link>
               </nav>
-              <ThemeToggle />
             </div>
           </div>
         </div>
@@ -83,11 +81,9 @@ export default function Layout({ children }: LayoutProps) {
             <div>
               <h4 className="font-semibold mb-3">프로젝트</h4>
               <ul className="space-y-2 text-sm text-gray-500">
-                <ul className="space-y-2 text-sm text-gray-500">
-                  <li> 팀명: 제작중</li>
-                  <li> 프로젝트: Price Trend AI</li>
-                  <li> 팀원: 이예준, 어영민</li>
-                </ul>
+                <li> 팀명: 제작중</li>
+                <li> 프로젝트: Price Trend AI</li>
+                <li> 팀원: 이예준, 어영민</li>
               </ul>
             </div>
             <div>
