@@ -80,18 +80,18 @@ export default function Layout({ children }: LayoutProps) {
             </div>
             <div>
               <h4 className="font-semibold mb-3">프로젝트</h4>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li> 팀명: 제작중</li>
-                <li> 프로젝트: Price Trend AI</li>
-                <li> 팀원: 이예준, 어영민</li>
+              <ul className="space-y-2 text-sm text-gray-500 dark:text-dark-subtext">
+                <li>프로젝트명: Price Trend AI</li>
+                <li>팀명: 제작 중</li>
+                <li>팀원: 양유나, 어영민, 이예준</li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-3">과목 정보</h4>
+              <h4 className="font-semibold mb-3">기타 정보</h4>
               <ul className="space-y-2 text-sm text-gray-500">
                 <li>과목명: 인공지능기반빅데이터분석</li>
-                <li>교수님: 장은실 교수님</li>
-                <li>학교: 중부대학교</li>
+                <li>지도 교수: 장은실 교수님</li>
+                <li>수행 기간: 2025.06.06 ~ 2025.06.13</li>
               </ul>
             </div>
           </div>
