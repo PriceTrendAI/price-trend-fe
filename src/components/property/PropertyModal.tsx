@@ -66,7 +66,7 @@ export default function PropertyModal({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4">
-      <div className="bg-white w-full max-w-4xl rounded-xl shadow-lg overflow-y-auto max-h-[90vh] dark:bg-dark-surface dark:shadow-xl">
+      <div className="bg-white w-full max-w-4xl rounded-xl shadow-lg overflow-y-auto max-h-[90vh] scrollbar-thin dark:bg-dark-surface dark:shadow-xl">
         <div className="border-b p-6 flex justify-between items-center dark:border-dark-border">
           <h2 className="text-xl font-semibold dark:text-dark-text">{property.title}</h2>
           <button
